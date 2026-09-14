@@ -209,11 +209,11 @@ longest-first; keep common words out.
 
 ## Palettes
 
-| Palette            | Light                                         | Dark                             | Backdrop                             | Ornaments | Pairs with                                                                                        |
-| ------------------ | --------------------------------------------- | -------------------------------- | ------------------------------------ | --------- | ------------------------------------------------------------------------------------------------- |
-| `marina`           | navy and brass on parchment                   | pale blue and brass on slate     | the sea, seen from a plane           | ⚓ ✥      | IM Fell English SC, Alegreya                                                                      |
-| `sangue-e-neve`    | crimson on cold white, petrol header          | rose-red on night, petrol header | falling snow                         | ☾ ✠       | Cinzel, EB Garamond, `title: centered`                                                            |
-| `oro-di-copertina` | blood red on parchment, black and gold header | gold on near-black               | an oil glaze, warm glows in the dark | ⚜ ❦       | UnifrakturMaguntia, Libre Caslon Text, IM Fell English SC for subheadings, and every style option |
+| Palette            | Light                                         | Dark                             | Backdrop                             | Ornaments | Pairs with                                                                                          |
+| ------------------ | --------------------------------------------- | -------------------------------- | ------------------------------------ | --------- | --------------------------------------------------------------------------------------------------- |
+| `marina`           | navy and brass on parchment                   | pale blue and brass on slate     | the sea, seen from a plane           | ⚓ ✥      | IM Fell English SC, Alegreya                                                                        |
+| `sangue-e-neve`    | crimson on cold white, petrol header          | rose-red on night, petrol header | falling snow                         | ☾ ✠       | Cinzel, EB Garamond, `title: centered`                                                              |
+| `oro-di-copertina` | blood red on parchment, black and gold header | gold on near-black               | an oil glaze, warm glows in the dark | ⚜ ❦       | Grenze Gotisch (600), Libre Caslon Text, IM Fell English SC for subheadings, and every style option |
 
 A session page in each palette, light scheme on the left and dark on the
 right. These come from the mock-ups the palettes were chosen on, with text
