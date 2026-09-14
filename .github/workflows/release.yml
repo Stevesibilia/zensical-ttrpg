@@ -1,0 +1,39 @@
+# Publishes a GitHub release when a version tag is pushed. The release notes
+# are the tag's own message, so write them when tagging:
+#   git tag -a v0.4.3 -F notes.md && git push origin main v0.4.3
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The checkout keeps the tag without its message; fetch the tag itself.
+      - name: Fetch the annotated tag
+        run: git fetch --force origin "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the version matches the tag
+        run: |
+          version=$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')
+          if [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "pyproject.toml says ${version}, the tag is ${GITHUB_REF_NAME}" >&2
+            exit 1
+          fi
+      - name: Install the theme
+        run: pip install .
+      - name: Build the example site
+        working-directory: example
+        run: zensical build
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-from-tag --verify-tag
