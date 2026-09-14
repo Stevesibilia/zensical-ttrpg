@@ -217,8 +217,10 @@
 
 /* With extra.ttrpg.subheadings: rubric, h2 to h4 are rubrics, as in an old
    manual: smaller, in the bold colour, over a dark rule. Only the page's own
-   headings; the home page's section titles keep their look. */
+   headings; the home page's section titles keep their look. They wrap as
+   text does, filling the line over the rule, with no word left alone. */
 .ttrpg-rubrics .md-typeset > :is(h2, h3, h4) {
+  text-wrap: pretty;
   color: var(--ttrpg-strong);
   font-size: 1.15em;
   line-height: 1.25;
@@ -466,6 +468,11 @@
 
 .ttrpg-cartouche .md-typeset :is(.ttrpg-brief, blockquote, .ttrpg-hub__session) {
   padding: 1.1em 1.6em 1em;
+}
+
+/* The identity box is narrow: enough room to clear the frame, no more. */
+.ttrpg-cartouche .md-typeset .ttrpg-infobox {
+  padding: 1em 1.1em;
 }
 
 .ttrpg-cartouche .md-typeset :is(.ttrpg-brief, blockquote, .ttrpg-infobox, .ttrpg-hub__session)::before {
