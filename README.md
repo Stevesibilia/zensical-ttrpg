@@ -11,6 +11,8 @@ It was inspired by [torillic](https://github.com/TEParsons/mkdocs-torillic),
 the D&D 5e theme for MkDocs, and made for Italian campaigns, so the interface
 speaks Italian or English, following `theme.language`.
 
+![A session page in the oro-di-copertina palette, light and dark](screenshots/oro-di-copertina.jpg)
+
 ## What it does
 
 - **Pages**: one readable column (about 70 characters), no sidebars on wide
@@ -212,6 +214,22 @@ longest-first; keep common words out.
 | `marina`           | navy and brass on parchment                   | pale blue and brass on slate     | the sea, seen from a plane           | ⚓ ✥      | IM Fell English SC, Alegreya                                                                        |
 | `sangue-e-neve`    | crimson on cold white, petrol header          | rose-red on night, petrol header | falling snow                         | ☾ ✠       | Cinzel, EB Garamond, `title: centered`                                                              |
 | `oro-di-copertina` | blood red on parchment, black and gold header | gold on near-black               | an oil glaze, warm glows in the dark | ⚜ ❦       | Grenze Gotisch (600), Libre Caslon Text, IM Fell English SC for subheadings, and every style option |
+
+A session page in each palette, light scheme on the left and dark on the
+right. These come from the mock-ups the palettes were chosen on, with text
+from real campaigns, so a detail or two differs from the theme.
+
+`marina`, for a 7th Sea campaign:
+
+![A session page in the marina palette, light and dark](screenshots/marina.jpg)
+
+`sangue-e-neve`, for a Vileborn campaign:
+
+![A session page in the sangue-e-neve palette, light and dark](screenshots/sangue-e-neve.jpg)
+
+`oro-di-copertina`, for a Historia campaign:
+
+![A session page in the oro-di-copertina palette, light and dark](screenshots/oro-di-copertina.jpg)
 
 ### Your own palette
 
