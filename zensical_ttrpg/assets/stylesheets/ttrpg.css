@@ -11,8 +11,15 @@
    the template from extra.ttrpg.heading_font. */
 :root {
   --ttrpg-head-font: Georgia, serif;
+  --ttrpg-text-size: clamp(17px, 0.9rem, 19px);
   --ttrpg-backdrop-texture: none;
   --ttrpg-backdrop-size: 560px;
+  /* Scene breaks (---) take turns between these two glyphs. */
+  --ttrpg-ornament-1: "\2766";
+  --ttrpg-ornament-2: "\2766";
+  /* Paper grain (generated noise, warm) and the shadow at the page edges. */
+  --ttrpg-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .35 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --ttrpg-vignette: rgba(80, 55, 25, 0.18);
 }
 
 /* ---------- Tokens handed to the theme ---------- */
@@ -89,10 +96,10 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .35 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-image: var(--ttrpg-paper-texture);
     opacity: var(--ttrpg-grain);
     mix-blend-mode: var(--ttrpg-grain-blend);
-    box-shadow: inset 0 0 70px rgba(80, 55, 25, 0.18);
+    box-shadow: inset 0 0 70px var(--ttrpg-vignette);
   }
 
   .md-content__inner {
@@ -131,7 +138,7 @@
 
 /* ---------- Text ---------- */
 .md-typeset {
-  font-size: clamp(17px, 0.9rem, 19px);
+  font-size: var(--ttrpg-text-size);
   line-height: 1.6;
   hyphens: auto;
 }
@@ -222,14 +229,14 @@
 /* ---------- Session pages ---------- */
 
 /* The date line under a session title ("*06.06.2025*"). */
-.md-typeset h1 + p:has(> em:only-child) {
+.md-typeset .ttrpg-head + p:has(> em:only-child) {
   margin-top: -0.3em;
   color: var(--ttrpg-muted);
   font-variant: small-caps;
   letter-spacing: 0.08em;
 }
 
-.md-typeset h1 + p:has(> em:only-child) em {
+.md-typeset .ttrpg-head + p:has(> em:only-child) em {
   font-style: normal;
 }
 
@@ -262,14 +269,69 @@
   font-size: 0.95em;
 }
 
-.md-typeset .ttrpg-eyebrow ~ .ttrpg-brief + p:has(> em:only-child) {
+.md-typeset .ttrpg-head:has(.ttrpg-eyebrow) + .ttrpg-brief + p:has(> em:only-child) {
   display: none;
+}
+
+/* The title block: <header class="ttrpg-head"> around the page's h1, with
+   the session line above it. With extra.ttrpg.title: centered it is centred,
+   the session line gets a rule on each side, and a brushed rule runs under
+   the title, as on a book's chapter opening. */
+.md-typeset .ttrpg-title-rule {
+  display: none;
+}
+
+.md-typeset .ttrpg-head--centered {
+  text-align: center;
+}
+
+.md-typeset .ttrpg-head--centered .ttrpg-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9em;
+  white-space: nowrap;
+}
+
+/* The rules give way to the text: they shrink, the date never wraps. */
+.md-typeset .ttrpg-head--centered .ttrpg-eyebrow::before,
+.md-typeset .ttrpg-head--centered .ttrpg-eyebrow::after {
+  content: "";
+  flex: 0 1 8rem;
+  min-width: 1rem;
+  height: 2px;
+  background: var(--ttrpg-brass);
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+}
+
+.md-typeset .ttrpg-head--centered .ttrpg-eyebrow::before {
+  clip-path: polygon(0 0, 100% 40%, 100% 60%, 0 100%);
+}
+
+.md-typeset .ttrpg-head--centered h1 {
+  font-size: 2.7em;
+  margin-bottom: 0.2em;
+}
+
+.md-typeset .ttrpg-head--centered .ttrpg-title-rule {
+  display: block;
+  width: min(78%, 24rem);
+  height: 3px;
+  margin: 0 auto 1.4em;
+  background: var(--ttrpg-brass);
+  clip-path: polygon(0 55%, 3% 30%, 12% 45%, 30% 10%, 50% 35%, 68% 5%, 86% 40%, 97% 25%, 100% 50%, 97% 80%, 80% 70%, 60% 100%, 42% 70%, 22% 95%, 8% 70%);
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .ttrpg-head--centered h1 {
+    font-size: 2.1em;
+  }
 }
 
 /* Drop cap on the first paragraph of the story. */
 .md-typeset .ttrpg-brief + p:not(:has(> em:only-child))::first-letter,
 .md-typeset .ttrpg-brief + p:has(> em:only-child) + p::first-letter,
-.md-typeset h1 + p:has(> em:only-child) + p::first-letter {
+.md-typeset .ttrpg-head + p:has(> em:only-child) + p::first-letter {
   float: left;
   font-family: var(--ttrpg-head-font);
   color: var(--ttrpg-head);
@@ -278,7 +340,7 @@
   padding: 0.07em 0.09em 0 0;
 }
 
-/* Scene breaks (---): anchor and compass rose, taking turns. */
+/* Scene breaks (---): the palette's two ornaments, taking turns. */
 .md-typeset hr {
   display: block;
   width: 60%;
@@ -295,12 +357,12 @@
 }
 
 .md-typeset hr::after {
-  content: "\2693\FE0E";
+  content: var(--ttrpg-ornament-1);
   font-size: 1.3em;
 }
 
 .md-typeset hr:nth-of-type(even)::after {
-  content: "\2725";
+  content: var(--ttrpg-ornament-2);
 }
 
 /* ---------- Boxes and tables ---------- */

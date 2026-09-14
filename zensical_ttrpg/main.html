@@ -7,6 +7,8 @@
                    `none` to bring your own through extra_css
     heading_font:  a Google Fonts family for headings; `false` to load none
                    and set --ttrpg-head-font yourself
+    title:         `centered` for centred titles with rules, as on a book's
+                   chapter openings (see partials/content.html)
 -#}
 {% set options = (config.extra.ttrpg if config.extra and config.extra.ttrpg else {}) %}
 {% set palette = options.palette or "marina" %}

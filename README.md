@@ -26,8 +26,11 @@ speaks Italian or English, following `theme.language`.
 - **Images**: a link around an image that points to an image file (a map)
   opens it full screen, with zoom, pinch and pan.
 - **Tooltips**: names from a glossary show a short description on hover.
-- **Palettes**: colours, backdrop and heading font come from a palette; the
-  first one is `marina`. A light and a dark scheme each, with a toggle.
+- **Palettes**: colours, backdrop, paper grain and scene-break ornaments come
+  from a palette: `marina` and `sangue-e-neve` so far. A light and a dark
+  scheme each, with a toggle.
+- **Centred titles**, as on a book's chapter openings, with rules beside the
+  session line and a brushed rule under the title (optional).
 
 ## Install
 
@@ -36,7 +39,7 @@ Zensical, from a release tag:
 
 ```text
 zensical==0.0.62
-zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.1.0.tar.gz
+zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.2.0.tar.gz
 ```
 
 No git is needed to install it, so it works in slim Docker images.
@@ -76,6 +79,7 @@ extra:
   ttrpg:
     palette: marina                    # a file in assets/stylesheets/palettes/
     heading_font: IM Fell English SC   # any Google Fonts family, or false
+    title: left                        # or centered
 
 markdown_extensions:
   - abbr
@@ -177,9 +181,10 @@ longest-first; keep common words out.
 
 ## Palettes
 
-| Palette  | Light                         | Dark                         | Backdrop                    |
-| -------- | ----------------------------- | ---------------------------- | --------------------------- |
-| `marina` | navy and brass on parchment   | pale blue and brass on slate | the sea, seen from a plane |
+| Palette         | Light                                | Dark                              | Backdrop                    | Ornaments | Pairs with                                       |
+| --------------- | ------------------------------------ | --------------------------------- | --------------------------- | --------- | ------------------------------------------------ |
+| `marina`        | navy and brass on parchment          | pale blue and brass on slate      | the sea, seen from a plane  | ⚓ ✥      | IM Fell English SC, Alegreya                     |
+| `sangue-e-neve` | crimson on cold white, petrol header | rose-red on night, petrol header  | falling snow                | ☾ ✠       | Cinzel, EB Garamond, `title: centered`           |
 
 ### Your own palette
 
@@ -211,8 +216,17 @@ is the one to copy:
 }
 ```
 
-An optional `--ttrpg-backdrop-texture` (an image or a generated SVG) and
-`--ttrpg-backdrop-size` add a texture over the gradient.
+Optional tokens, for either scheme or both:
+
+```css
+  --ttrpg-backdrop-texture: url(...);   /* over the gradient; none by default */
+  --ttrpg-backdrop-size: 560px;         /* its tile size */
+  --ttrpg-ornament-1: "\2766";          /* scene breaks take turns between */
+  --ttrpg-ornament-2: "\2766";          /* these two glyphs */
+  --ttrpg-paper-texture: url(...);      /* the paper grain; warm noise by default */
+  --ttrpg-vignette: rgba(80, 55, 25, 0.18); /* shadow at the page edges */
+  --ttrpg-text-size: clamp(17px, 0.9rem, 19px);
+```
 
 New palettes are welcome as pull requests: one file in
 `assets/stylesheets/palettes/`, and a line in the table above.

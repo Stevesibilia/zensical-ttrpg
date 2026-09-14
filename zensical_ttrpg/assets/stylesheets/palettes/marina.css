@@ -48,6 +48,10 @@
 /* ---------- Both schemes ---------- */
 [data-md-color-scheme="default"],
 [data-md-color-scheme="slate"] {
+  /* Scene breaks: an anchor, then a compass rose. */
+  --ttrpg-ornament-1: "\2693\FE0E";
+  --ttrpg-ornament-2: "\2725";
+
   /* The sea behind the page, as from an airplane: faint ripples and a few
      white crests. Generated in the browser, nothing to download. */
   --ttrpg-backdrop-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Cfilter id='r' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.014 .05' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeDiffuseLighting surfaceScale='4' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='240' elevation='45'/%3E%3C/feDiffuseLighting%3E%3CfeColorMatrix values='0 0 0 0 .62 0 0 0 0 .78 0 0 0 0 .95 0.3 0 0 0 -0.165'/%3E%3C/filter%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.022 0.15' numOctaves='2' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .94 0 0 0 0 .97 0 0 0 0 1 1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='13.04' intercept='-10.04'/%3E%3C/feComponentTransfer%3E%3CfeGaussianBlur stdDeviation='.45'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.6'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23r%29'/%3E%3Crect width='100%25' height='100%25' filter='url%28%23c%29'/%3E%3C/svg%3E");
