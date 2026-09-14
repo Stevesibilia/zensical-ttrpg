@@ -39,7 +39,7 @@ Zensical, from a release tag:
 
 ```text
 zensical==0.0.62
-zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.2.0.tar.gz
+zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.3.0.tar.gz
 ```
 
 No git is needed to install it, so it works in slim Docker images.
@@ -141,8 +141,10 @@ Profession
 The rest of the page...
 ```
 
-The portrait is placed at the top of the box. A list of sayings can go in
-`<div class="ttrpg-quotes" markdown>`.
+The portrait is placed at the top of the box; a page with a portrait and no
+box gets the portrait on its own, beside the text. A character without a
+portrait can say `character: true` to still appear on the home page, with its
+initial. A list of sayings can go in `<div class="ttrpg-quotes" markdown>`.
 
 ### The home page
 
@@ -158,9 +160,9 @@ map_thumbnail: maps/images/theah_small.webp
 A line or two about it.
 ```
 
-With `hub: true` the page shows the latest session, every page with a
-`portrait` (up to three levels deep in the nav), and the map, which opens full
-screen on click.
+With `hub: true` the page shows the latest session, every character (a page
+with a `portrait` or `character: true`, up to three levels deep in the nav),
+and the map, which opens full screen on click.
 
 ### Section pages
 

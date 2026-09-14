@@ -3,8 +3,8 @@
   and, from the page's front matter (see partials/ttrpg.html):
   - on session pages, the session number and date above the title, and the
     excerpt in a summary box under it;
-  - on character pages, the portrait at the top of the identity box
-    (<aside class="ttrpg-infobox" markdown> in the page).
+  - on character pages, the portrait: at the top of the identity box
+    (<aside class="ttrpg-infobox" markdown> in the page), or on its own.
   With extra.ttrpg.title: centered the title block is centred, with rules.
 -#}
 {% import "partials/ttrpg.html" as ttrpg with context %}
@@ -16,10 +16,18 @@
 {% set options = (config.extra.ttrpg if config.extra and config.extra.ttrpg else {}) %}
 {% set html = page.content %}
 
-{#- The portrait, at the top of the identity box. -#}
-{% if meta.portrait and 'class="ttrpg-infobox">' in html %}
-  {% set portrait %}class="ttrpg-infobox"><img class="ttrpg-portrait" src="{{ meta.portrait | url }}" alt="{{ ttrpg.t('portrait_of') }} {{ page.title }}" loading="lazy">{% endset %}
-  {% set html = html | replace('class="ttrpg-infobox">', portrait) %}
+{#-
+  The portrait: at the top of the identity box when the page has one, else
+  in a box of its own beside the text, under the title.
+-#}
+{% set portrait_box = "" %}
+{% if meta.portrait %}
+  {% set portrait_img %}<img class="ttrpg-portrait" src="{{ meta.portrait | url }}" alt="{{ ttrpg.t('portrait_of') }} {{ page.title }}" loading="lazy">{% endset %}
+  {% if 'class="ttrpg-infobox">' in html %}
+    {% set html = html | replace('class="ttrpg-infobox">', 'class="ttrpg-infobox">' ~ portrait_img) %}
+  {% else %}
+    {% set portrait_box = '<aside class="ttrpg-infobox ttrpg-infobox--portrait">' ~ portrait_img ~ '</aside>' %}
+  {% endif %}
 {% endif %}
 
 {#- The title block, the session line and the summary box. -#}
@@ -39,6 +47,7 @@
       <span class="ttrpg-title-rule" aria-hidden="true"></span>
     {%- endif -%}
     </header>
+    {{- portrait_box | safe -}}
     {%- if meta.excerpt -%}
       <aside class="ttrpg-brief" aria-label="{{ ttrpg.t('summary') }}"><span class="ttrpg-brief__label">{{ ttrpg.t("summary") }}</span><p>{{ meta.excerpt }}</p></aside>
     {%- endif -%}

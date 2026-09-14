@@ -700,6 +700,33 @@
   object-position: top;
 }
 
+/* A character without a portrait: their initial, on a tinted card. */
+.md-typeset .ttrpg-party__monogram {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--ttrpg-head) 28%, var(--ttrpg-paper)), color-mix(in srgb, var(--ttrpg-head) 68%, var(--ttrpg-paper)));
+  outline: 1px solid var(--ttrpg-brass);
+  outline-offset: -6px;
+  color: var(--ttrpg-paper);
+  font-family: var(--ttrpg-head-font);
+  font-size: 3.2em;
+  line-height: 1;
+}
+
+/* A portrait without an identity box: just the picture, beside the text. */
+.md-typeset .ttrpg-infobox--portrait .ttrpg-portrait {
+  margin: 0;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .ttrpg-infobox--portrait {
+    display: block;
+    width: 60%;
+    margin-inline: auto;
+  }
+}
+
 .md-typeset .ttrpg-party a:hover span,
 .md-typeset .ttrpg-party a:focus-visible span {
   text-decoration: underline 1px var(--ttrpg-brass);

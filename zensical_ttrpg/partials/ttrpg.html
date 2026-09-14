@@ -7,8 +7,9 @@
     date: 2025-06-06
     excerpt: One or two sentences on what happened.
 
-  Character pages may carry a `portrait` (a path from the docs folder). Every
-  piece falls back to what the page has when a key is missing.
+  Character pages carry a `portrait` (a path from the docs folder) or, without
+  one, `character: true`. Every piece falls back to what the page has when a
+  key is missing.
 -#}
 
 {#- Interface text, by the site's language (theme.language), English otherwise. -#}
@@ -63,6 +64,11 @@
 {#- Whether a nav item is a session page: "yes" or nothing. -#}
 {% macro is_session(item) -%}
   {%- if item.meta and item.meta.session -%}yes{%- endif -%}
+{%- endmacro %}
+
+{#- Whether a nav item is a character: a `portrait`, or `character: true`. -#}
+{% macro is_character(item) -%}
+  {%- if item.meta and (item.meta.portrait or item.meta.character) -%}yes{%- endif -%}
 {%- endmacro %}
 
 {#- A section's session pages, newest first, then its other pages. -#}
@@ -153,7 +159,8 @@
 
 {#-
   The home page, when its front matter says `hub: true`: the latest session,
-  the characters (the pages with a `portrait`, up to three levels deep), and
+  the characters (pages with a `portrait` or `character: true`, up to three
+  levels deep; a monogram stands in for a missing portrait), and
   the map from the front matter's `map` and `map_thumbnail`.
 -#}
 {% macro home_hub() %}
@@ -163,14 +170,14 @@
       {% if is_session(child) %}
         {% set found.latest = child %}
       {% endif %}
-      {% if child.meta and child.meta.portrait %}
+      {% if is_character(child) %}
         {% set found.party = found.party + [child] %}
       {% endif %}
       {% for grandchild in child.children or [] %}
         {% if is_session(grandchild) %}
           {% set found.latest = grandchild %}
         {% endif %}
-        {% if grandchild.meta and grandchild.meta.portrait %}
+        {% if is_character(grandchild) %}
           {% set found.party = found.party + [grandchild] %}
         {% endif %}
       {% endfor %}
@@ -198,7 +205,11 @@
           {% for member in found.party %}
             <li>
               <a href="{{ member.url | url }}">
-                <img src="{{ member.meta.portrait | url }}" alt="" loading="lazy">
+                {% if member.meta.portrait %}
+                  <img src="{{ member.meta.portrait | url }}" alt="" loading="lazy">
+                {% else %}
+                  <span class="ttrpg-party__monogram" aria-hidden="true">{{ member.title[0:1] }}</span>
+                {% endif %}
                 <span>{{ member.title }}</span>
               </a>
             </li>
