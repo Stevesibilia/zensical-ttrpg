@@ -1,0 +1,69 @@
+/*
+ * Oro di copertina: black, gold and crimson, as on the cover of the Historia
+ * manual, over the dark oil glaze of its chapter openings. Blood-red titles
+ * on warm parchment by day, gold titles on near-black by candlelight. Fits
+ * any dark, Renaissance, gothic campaign.
+ *
+ * Suggested with heading_font: Grenze Gotisch (heading_weight: 600),
+ * subheading_font: IM Fell English SC, text font Libre Caslon Text,
+ * title: centered, subheadings: rubric, drop_cap: illuminated,
+ * corners: filigree and boxes: cartouche.
+ */
+
+/* ---------- Light scheme ---------- */
+[data-md-color-scheme="default"] {
+  --ttrpg-paper: #f4ecd9;
+  --ttrpg-ink: #1a1410;
+  --ttrpg-ink-rgb: 26, 20, 16;
+  --ttrpg-muted: #6b5d4e;
+  --ttrpg-head: #7a1d1a;
+  --ttrpg-strong: #7a1d1a;
+  --ttrpg-brass: #a8801c;
+  --ttrpg-box: #ece0bf;
+  --ttrpg-rule: #a8801c;
+  --ttrpg-bar: #0d0a08;
+  --ttrpg-bar-ink: #e9c440;
+  --ttrpg-backdrop-1: #6e2420;
+  --ttrpg-backdrop-2: #150605;
+  --ttrpg-grain: 0.38;
+  --ttrpg-grain-blend: multiply;
+  --ttrpg-vignette: rgba(110, 60, 20, 0.2);
+  --ttrpg-lift: rgba(40, 10, 5, 0.5);
+}
+
+/* ---------- Dark scheme ---------- */
+[data-md-color-scheme="slate"] {
+  --ttrpg-paper: #15100e;
+  --ttrpg-ink: #efe5d3;
+  --ttrpg-ink-rgb: 239, 229, 211;
+  --ttrpg-muted: #b09f86;
+  --ttrpg-head: #e9c440;
+  --ttrpg-strong: #e88878;
+  --ttrpg-brass: #c9a13a;
+  --ttrpg-box: #241b14;
+  --ttrpg-rule: #c9a13a;
+  --ttrpg-bar: #070504;
+  --ttrpg-bar-ink: #e9c440;
+  --ttrpg-backdrop-1: #4a1714;
+  --ttrpg-backdrop-2: #050202;
+  --ttrpg-grain: 0.15;
+  --ttrpg-grain-blend: overlay;
+  --ttrpg-vignette: rgba(0, 0, 0, 0.55);
+  --ttrpg-lift: rgba(0, 0, 0, 0.65);
+}
+
+/* ---------- Both schemes ---------- */
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+  /* Scene breaks: a fleur-de-lis, then a fleuron. */
+  --ttrpg-ornament-1: "\269C\FE0E";
+  --ttrpg-ornament-2: "\2766";
+
+  /* An oil glaze behind the page: soft warm glows in the dark, as in the
+     manual's chapter openings. Generated in the browser. */
+  --ttrpg-backdrop-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.005' numOctaves='5' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .8 0 0 0 0 .6 .8 0 0 0 -.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --ttrpg-backdrop-size: 640px;
+
+  /* Libre Caslon is wide and reads large: a step down from the default. */
+  --ttrpg-text-size: clamp(16.5px, 0.85rem, 18px);
+}

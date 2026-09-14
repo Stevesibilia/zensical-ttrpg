@@ -3,12 +3,21 @@
 
 {#-
   Site options, under `extra.ttrpg` in mkdocs.yml:
-    palette:       a file in assets/stylesheets/palettes/, without ".css";
-                   `none` to bring your own through extra_css
-    heading_font:  a Google Fonts family for headings; `false` to load none
-                   and set --ttrpg-head-font yourself
-    title:         `centered` for centred titles with rules, as on a book's
-                   chapter openings (see partials/content.html)
+    palette:          a file in assets/stylesheets/palettes/, without ".css";
+                      `none` to bring your own through extra_css
+    heading_font:     a Google Fonts family for headings; `false` to load none
+                      and set --ttrpg-head-font yourself
+    heading_weight:   the weight of it to load (e.g. 600); the family's
+                      default when left out
+    subheading_font:  a Google Fonts family for h2 to h4; the heading font
+                      when left out
+    title:            `centered` for centred titles with rules, as on a
+                      book's chapter openings (see partials/content.html)
+    subheadings:      `rubric` for h2 to h4 in the bold colour over a dark rule
+    drop_cap:         `illuminated` for a boxed, engraved drop cap
+    corners:          `filigree` for ornaments in the corners of the page
+    boxes:            `cartouche` for raised boxes with small corner ornaments
+  The last four become classes on .md-content (see the container block).
 -#}
 {% set options = (config.extra.ttrpg if config.extra and config.extra.ttrpg else {}) %}
 {% set palette = options.palette or "marina" %}
@@ -25,23 +34,44 @@
 {% block fonts %}
   {{ super() }}
   {% if heading_font %}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ heading_font | replace(' ', '+') }}&amp;display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ heading_font | replace(' ', '+') }}{% if options.heading_weight %}:wght@{{ options.heading_weight }}{% endif %}&amp;display=fallback">
     <style>:root{--ttrpg-head-font:"{{ heading_font }}",Georgia,serif}</style>
+  {% endif %}
+  {% if options.subheading_font %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ options.subheading_font | replace(' ', '+') }}&amp;display=fallback">
+    <style>:root{--ttrpg-subhead-font:"{{ options.subheading_font }}",Georgia,serif}</style>
   {% endif %}
 {% endblock %}
 
 {#-
-  The home page hub (`hub: true`), then, on the first page of a section, the
-  rest of the section; `contents: none` in the front matter turns that off.
+  Zensical's container block, with the site's style options as classes on
+  .md-content. Then, in the content block: the home page hub (`hub: true`)
+  and, on the first page of a section, the rest of the section;
+  `contents: none` in the front matter turns that off.
 -#}
-{% block content %}
-  {{ super() }}
-  {% if page.meta and page.meta.hub %}
-    {{ ttrpg.home_hub() }}
-  {% endif %}
-  {% if not (page.meta and page.meta.contents == "none") %}
-    {{ ttrpg.section_contents(nav.items) }}
-  {% endif %}
+{% block container %}
+  {% set modifiers -%}
+    {%- if options.subheadings == "rubric" %} ttrpg-rubrics{% endif -%}
+    {%- if options.drop_cap == "illuminated" %} ttrpg-illuminated{% endif -%}
+    {%- if options.corners == "filigree" %} ttrpg-corners{% endif -%}
+    {%- if options.boxes == "cartouche" %} ttrpg-cartouche{% endif -%}
+  {%- endset %}
+  <div class="md-content{{ modifiers }}" data-md-component="content">
+    {% if "navigation.path" in (config.theme.features or []) %}
+      {% include "partials/path.html" %}
+    {% endif %}
+    <article class="md-content__inner md-typeset">
+      {% block content %}
+        {{ super() }}
+        {% if page.meta and page.meta.hub %}
+          {{ ttrpg.home_hub() }}
+        {% endif %}
+        {% if not (page.meta and page.meta.contents == "none") %}
+          {{ ttrpg.section_contents(nav.items) }}
+        {% endif %}
+      {% endblock %}
+    </article>
+  </div>
 {% endblock %}
 
 {% block scripts %}

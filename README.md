@@ -27,10 +27,11 @@ speaks Italian or English, following `theme.language`.
   opens it full screen, with zoom, pinch and pan.
 - **Tooltips**: names from a glossary show a short description on hover.
 - **Palettes**: colours, backdrop, paper grain and scene-break ornaments come
-  from a palette: `marina` and `sangue-e-neve` so far. A light and a dark
-  scheme each, with a toggle.
-- **Centred titles**, as on a book's chapter openings, with rules beside the
-  session line and a brushed rule under the title (optional).
+  from a palette: `marina`, `sangue-e-neve` and `oro-di-copertina` so far. A
+  light and a dark scheme each, with a toggle.
+- **Book-like touches**, each optional: centred titles, as on a book's chapter
+  openings; subheadings as rubrics; an illuminated drop cap; filigree in the
+  corners of the page; raised boxes with corner ornaments.
 
 ## Install
 
@@ -39,7 +40,7 @@ Zensical, from a release tag:
 
 ```text
 zensical==0.0.62
-zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.3.0.tar.gz
+zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.4.0.tar.gz
 ```
 
 No git is needed to install it, so it works in slim Docker images.
@@ -51,11 +52,11 @@ In `mkdocs.yml` (Zensical reads it as it is):
 ```yaml
 theme:
   name: ttrpg
-  language: it            # or en: the interface text follows it
+  language: it # or en: the interface text follows it
   font:
     text: Alegreya
     code: Source Code Pro
-  palette:                # the first scheme is the default
+  palette: # the first scheme is the default
     - scheme: slate
       primary: custom
       accent: custom
@@ -77,9 +78,9 @@ theme:
 
 extra:
   ttrpg:
-    palette: marina                    # a file in assets/stylesheets/palettes/
-    heading_font: IM Fell English SC   # any Google Fonts family, or false
-    title: left                        # or centered
+    palette: marina # a file in assets/stylesheets/palettes/
+    heading_font: IM Fell English SC # any Google Fonts family, or false
+    title: left # or centered
 
 markdown_extensions:
   - abbr
@@ -88,10 +89,30 @@ markdown_extensions:
   - def_list
   - pymdownx.snippets:
       auto_append:
-        - includes/glossario.md       # the glossary; skipped while missing
+        - includes/glossario.md # the glossary; skipped while missing
 ```
 
 `primary: custom` and `accent: custom` hand the colours over to the palette.
+
+### Style options
+
+More options under `extra.ttrpg`, all off by default:
+
+```yaml
+extra:
+  ttrpg:
+    heading_weight: 600 # the weight of heading_font to load
+    subheading_font: IM Fell English SC # a Google Fonts family for h2 to h4
+    subheadings: rubric # h2 to h4 in the bold colour, over a dark rule
+    drop_cap: illuminated # the drop cap in a box with a double rule
+    corners: filigree # an ornament in each corner of the page
+    boxes: cartouche # boxes raised off the page, with corner ornaments
+```
+
+Without `subheading_font`, h2 to h4 use the heading font. `boxes: cartouche`
+applies to the summary box, quotes (`>`), the identity box and the latest
+session on the home page. The corners show from tablet width up, where the
+page is a sheet of paper.
 
 ## Writing pages
 
@@ -105,6 +126,7 @@ session: 15
 date: 2025-06-06
 excerpt: "Neville investigates a strange illness on board while a storm hits the fleet."
 ---
+
 # The Storm
 
 The story...
@@ -126,15 +148,16 @@ docs folder, and wraps its identity fields in a box:
 ---
 portrait: characters/images/arnaud.webp
 ---
+
 # Arnaud de Saint-Raveneaux
 
 <aside class="ttrpg-infobox" markdown>
 
 Nationality
-:   Montaigne
+: Montaigne
 
 Profession
-:   Mercenary and duellist
+: Mercenary and duellist
 
 </aside>
 
@@ -155,6 +178,7 @@ contents: none
 map: maps/images/theah.webp
 map_thumbnail: maps/images/theah_small.webp
 ---
+
 # My Campaign
 
 A line or two about it.
@@ -183,10 +207,11 @@ longest-first; keep common words out.
 
 ## Palettes
 
-| Palette         | Light                                | Dark                              | Backdrop                    | Ornaments | Pairs with                                       |
-| --------------- | ------------------------------------ | --------------------------------- | --------------------------- | --------- | ------------------------------------------------ |
-| `marina`        | navy and brass on parchment          | pale blue and brass on slate      | the sea, seen from a plane  | ⚓ ✥      | IM Fell English SC, Alegreya                     |
-| `sangue-e-neve` | crimson on cold white, petrol header | rose-red on night, petrol header  | falling snow                | ☾ ✠       | Cinzel, EB Garamond, `title: centered`           |
+| Palette            | Light                                         | Dark                             | Backdrop                             | Ornaments | Pairs with                                                                                          |
+| ------------------ | --------------------------------------------- | -------------------------------- | ------------------------------------ | --------- | --------------------------------------------------------------------------------------------------- |
+| `marina`           | navy and brass on parchment                   | pale blue and brass on slate     | the sea, seen from a plane           | ⚓ ✥      | IM Fell English SC, Alegreya                                                                        |
+| `sangue-e-neve`    | crimson on cold white, petrol header          | rose-red on night, petrol header | falling snow                         | ☾ ✠       | Cinzel, EB Garamond, `title: centered`                                                              |
+| `oro-di-copertina` | blood red on parchment, black and gold header | gold on near-black               | an oil glaze, warm glows in the dark | ⚜ ❦       | Grenze Gotisch (600), Libre Caslon Text, IM Fell English SC for subheadings, and every style option |
 
 ### Your own palette
 
@@ -196,20 +221,20 @@ is the one to copy:
 
 ```css
 [data-md-color-scheme="default"] {
-  --ttrpg-paper: #f7f1e3;       /* the page */
-  --ttrpg-ink: #1d2530;         /* text */
-  --ttrpg-ink-rgb: 29, 37, 48;  /* the same, for translucent greys */
-  --ttrpg-muted: #5a6573;       /* dates, labels */
-  --ttrpg-head: #1b3a5c;        /* headings, links */
-  --ttrpg-strong: #1b3a5c;      /* bold, badges */
-  --ttrpg-brass: #b58f45;       /* rules and ornaments, never text */
-  --ttrpg-box: #e3e7e6;         /* boxes, table stripes */
-  --ttrpg-rule: #b58f45;        /* box borders */
-  --ttrpg-bar: #16304d;         /* header, tabs, footer */
-  --ttrpg-bar-ink: #f4ecd8;     /* their text */
-  --ttrpg-backdrop-1: #24476b;  /* backdrop gradient, lit side */
-  --ttrpg-backdrop-2: #0b1a2b;  /* backdrop gradient, dark side */
-  --ttrpg-grain: 0.45;          /* paper grain opacity */
+  --ttrpg-paper: #f7f1e3; /* the page */
+  --ttrpg-ink: #1d2530; /* text */
+  --ttrpg-ink-rgb: 29, 37, 48; /* the same, for translucent greys */
+  --ttrpg-muted: #5a6573; /* dates, labels */
+  --ttrpg-head: #1b3a5c; /* headings, links */
+  --ttrpg-strong: #1b3a5c; /* bold, badges */
+  --ttrpg-brass: #b58f45; /* rules and ornaments, never text */
+  --ttrpg-box: #e3e7e6; /* boxes, table stripes */
+  --ttrpg-rule: #b58f45; /* box borders */
+  --ttrpg-bar: #16304d; /* header, tabs, footer */
+  --ttrpg-bar-ink: #f4ecd8; /* their text */
+  --ttrpg-backdrop-1: #24476b; /* backdrop gradient, lit side */
+  --ttrpg-backdrop-2: #0b1a2b; /* backdrop gradient, dark side */
+  --ttrpg-grain: 0.45; /* paper grain opacity */
   --ttrpg-grain-blend: multiply;
 }
 
@@ -221,14 +246,20 @@ is the one to copy:
 Optional tokens, for either scheme or both:
 
 ```css
-  --ttrpg-backdrop-texture: url(...);   /* over the gradient; none by default */
-  --ttrpg-backdrop-size: 560px;         /* its tile size */
-  --ttrpg-ornament-1: "\2766";          /* scene breaks take turns between */
-  --ttrpg-ornament-2: "\2766";          /* these two glyphs */
-  --ttrpg-paper-texture: url(...);      /* the paper grain; warm noise by default */
-  --ttrpg-vignette: rgba(80, 55, 25, 0.18); /* shadow at the page edges */
-  --ttrpg-text-size: clamp(17px, 0.9rem, 19px);
+--ttrpg-backdrop-texture: url(...); /* over the gradient; none by default */
+--ttrpg-backdrop-size: 560px; /* its tile size */
+--ttrpg-ornament-1: "\2766"; /* scene breaks take turns between */
+--ttrpg-ornament-2: "\2766"; /* these two glyphs */
+--ttrpg-paper-texture: url(...); /* the paper grain; warm noise by default */
+--ttrpg-vignette: rgba(80, 55, 25, 0.18); /* shadow at the page edges */
+--ttrpg-text-size: clamp(17px, 0.9rem, 19px);
+--ttrpg-lift: rgba(40, 20, 5, 0.45); /* shadow under raised boxes */
+--ttrpg-corners: url(...); /* page corners, all four in one image */
+--ttrpg-box-corners: url(...); /* box corners, the same way */
 ```
+
+The corner images are masks: only their shape counts, and they take the
+colour of `--ttrpg-brass`.
 
 New palettes are welcome as pull requests: one file in
 `assets/stylesheets/palettes/`, and a line in the table above.

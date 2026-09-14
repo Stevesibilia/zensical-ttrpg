@@ -20,6 +20,15 @@
   /* Paper grain (generated noise, warm) and the shadow at the page edges. */
   --ttrpg-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .35 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --ttrpg-vignette: rgba(80, 55, 25, 0.18);
+  /* h2 to h4: the heading font, unless extra.ttrpg.subheading_font is set. */
+  --ttrpg-subhead-font: var(--ttrpg-head-font);
+  /* The shadow under a raised box (extra.ttrpg.boxes: cartouche). */
+  --ttrpg-lift: rgba(40, 20, 5, 0.45);
+  /* Filigree for the corners of the page (extra.ttrpg.corners: filigree) and
+     of the boxes (boxes: cartouche). Each is one image holding all four
+     corners, used as a mask: the colour comes from --ttrpg-brass. */
+  --ttrpg-corners: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='f' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='120' y2='0'%3E%3Cstop offset='.25' stop-color='%23000'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cg id='s'%3E%3Cpath d='M4 4H120' stroke='url(%23f)' stroke-width='2.2'/%3E%3Cpath d='M11 11H92' stroke='url(%23f)' stroke-width='.9'/%3E%3Cpath d='M22 18C34 29 50 29 57 20C61 13 55 6 48 10C43 13 46 20 51 17' stroke='%23000' stroke-width='2.2'/%3E%3Cpath d='M57 20C68 31 84 27 106 18' stroke='url(%23f)' stroke-width='1.5'/%3E%3Cpath d='M70 25C77 15 90 13 97 17C89 23 80 27 70 25Z' fill='%23000'/%3E%3Cpath d='M36 26C40 33 38 40 32 44' stroke='%23000' stroke-width='1.3'/%3E%3C/g%3E%3Csymbol id='c' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' transform='matrix(0 1 1 0 0 0)'/%3E%3Cpath d='M21 21L37 37' stroke='%23000' stroke-width='1.8'/%3E%3C/g%3E%3Ccircle cx='15' cy='15' r='4.6'/%3E%3Cpath d='M35 35L46 39L51 51L39 46Z'/%3E%3C/symbol%3E%3C/defs%3E%3Cuse href='%23c' width='100' height='100'/%3E%3Csvg x='100%25' overflow='visible'%3E%3Cuse href='%23c' width='100' height='100' transform='scale(-1 1)'/%3E%3C/svg%3E%3Csvg y='100%25' overflow='visible'%3E%3Cuse href='%23c' width='100' height='100' transform='scale(1 -1)'/%3E%3C/svg%3E%3Csvg x='100%25' y='100%25' overflow='visible'%3E%3Cuse href='%23c' width='100' height='100' transform='scale(-1 -1)'/%3E%3C/svg%3E%3C/svg%3E");
+  --ttrpg-box-corners: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='f' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='120' y2='0'%3E%3Cstop offset='.25' stop-color='%23000'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cg id='s'%3E%3Cpath d='M4 4H120' stroke='url(%23f)' stroke-width='2.2'/%3E%3Cpath d='M11 11H92' stroke='url(%23f)' stroke-width='.9'/%3E%3Cpath d='M22 18C34 29 50 29 57 20C61 13 55 6 48 10C43 13 46 20 51 17' stroke='%23000' stroke-width='2.2'/%3E%3Cpath d='M57 20C68 31 84 27 106 18' stroke='url(%23f)' stroke-width='1.5'/%3E%3Cpath d='M70 25C77 15 90 13 97 17C89 23 80 27 70 25Z' fill='%23000'/%3E%3Cpath d='M36 26C40 33 38 40 32 44' stroke='%23000' stroke-width='1.3'/%3E%3C/g%3E%3Csymbol id='c' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' transform='matrix(0 1 1 0 0 0)'/%3E%3Cpath d='M21 21L37 37' stroke='%23000' stroke-width='1.8'/%3E%3C/g%3E%3Ccircle cx='15' cy='15' r='4.6'/%3E%3Cpath d='M35 35L46 39L51 51L39 46Z'/%3E%3C/symbol%3E%3C/defs%3E%3Cuse href='%23c' width='30' height='30'/%3E%3Csvg x='100%25' overflow='visible'%3E%3Cuse href='%23c' width='30' height='30' transform='scale(-1 1)'/%3E%3C/svg%3E%3Csvg y='100%25' overflow='visible'%3E%3Cuse href='%23c' width='30' height='30' transform='scale(1 -1)'/%3E%3C/svg%3E%3Csvg x='100%25' y='100%25' overflow='visible'%3E%3Cuse href='%23c' width='30' height='30' transform='scale(-1 -1)'/%3E%3C/svg%3E%3C/svg%3E");
 }
 
 /* ---------- Tokens handed to the theme ---------- */
@@ -107,6 +116,23 @@
     margin: 0;
     padding: 2.6rem 3.2rem 2rem;
   }
+
+  /* With extra.ttrpg.corners: filigree, an ornament in each corner of the
+     sheet, and a little more room for them above and below the text. */
+  .md-content.ttrpg-corners::after {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    pointer-events: none;
+    background: var(--ttrpg-brass);
+    -webkit-mask: var(--ttrpg-corners) 0 0 / 100% 100% no-repeat;
+    mask: var(--ttrpg-corners) 0 0 / 100% 100% no-repeat;
+  }
+
+  .md-content.ttrpg-corners .md-content__inner {
+    padding-top: 3.4rem;
+    padding-bottom: 3rem;
+  }
 }
 
 /* ---------- Header, tabs, footer ---------- */
@@ -160,6 +186,12 @@
   text-wrap: balance;
 }
 
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: var(--ttrpg-subhead-font);
+}
+
 .md-typeset h1 {
   font-size: 2.4em;
   line-height: 1.05;
@@ -181,6 +213,26 @@
   font-size: 1.1em;
   border-bottom: 1px solid var(--ttrpg-brass);
   padding-bottom: 0.1em;
+}
+
+/* With extra.ttrpg.subheadings: rubric, h2 to h4 are rubrics, as in an old
+   manual: smaller, in the bold colour, over a dark rule. Only the page's own
+   headings; the home page's section titles keep their look. */
+.ttrpg-rubrics .md-typeset > :is(h2, h3, h4) {
+  color: var(--ttrpg-strong);
+  font-size: 1.15em;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  padding-bottom: 0.12em;
+  border-bottom: 1.5px solid rgba(var(--ttrpg-ink-rgb), 0.7);
+}
+
+.ttrpg-rubrics .md-typeset > h2 {
+  font-size: 1.3em;
+}
+
+.ttrpg-rubrics .md-typeset > h4 {
+  font-size: 1.05em;
 }
 
 .md-typeset strong {
@@ -340,6 +392,22 @@
   padding: 0.07em 0.09em 0 0;
 }
 
+/* With extra.ttrpg.drop_cap: illuminated, the drop cap sits in a box with a
+   double rule and an engraved crosshatch, as a printed initial. */
+.ttrpg-illuminated .md-typeset .ttrpg-brief + p:not(:has(> em:only-child))::first-letter,
+.ttrpg-illuminated .md-typeset .ttrpg-brief + p:has(> em:only-child) + p::first-letter,
+.ttrpg-illuminated .md-typeset .ttrpg-head + p:has(> em:only-child) + p::first-letter {
+  font-size: 3em;
+  line-height: 1;
+  margin: 0.16em 0.24em 0 0;
+  padding: 0.12em 0.2em 0.08em;
+  background:
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--ttrpg-brass) 34%, transparent) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--ttrpg-brass) 34%, transparent) 0 1px, transparent 1px 6px),
+    var(--ttrpg-box);
+  border: 4px double var(--ttrpg-brass);
+}
+
 /* Scene breaks (---): the palette's two ornaments, taking turns. */
 .md-typeset hr {
   display: block;
@@ -381,6 +449,41 @@
 
 .md-typeset blockquote > :last-child {
   margin-bottom: 0;
+}
+
+/* With extra.ttrpg.boxes: cartouche, the boxes are raised off the page
+   instead of ruled: a thin inner frame, a shadow, and filigree corners. */
+.ttrpg-cartouche .md-typeset :is(.ttrpg-brief, blockquote, .ttrpg-infobox, .ttrpg-hub__session) {
+  position: relative;
+  border: 0;
+  outline: 1px solid color-mix(in srgb, var(--ttrpg-brass) 55%, transparent);
+  outline-offset: -7px;
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.1),
+    0 16px 26px -14px var(--ttrpg-lift),
+    0 2px 6px -2px var(--ttrpg-lift);
+}
+
+.ttrpg-cartouche .md-typeset :is(.ttrpg-brief, blockquote, .ttrpg-hub__session) {
+  padding: 1.1em 1.6em 1em;
+}
+
+.ttrpg-cartouche .md-typeset :is(.ttrpg-brief, blockquote, .ttrpg-infobox, .ttrpg-hub__session)::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  opacity: 0.85;
+  background: var(--ttrpg-brass);
+  -webkit-mask: var(--ttrpg-box-corners) 0 0 / 100% 100% no-repeat;
+  mask: var(--ttrpg-box-corners) 0 0 / 100% 100% no-repeat;
+}
+
+.ttrpg-cartouche .md-typeset .ttrpg-brief__label {
+  margin-bottom: 0.3em;
+  font-family: var(--ttrpg-subhead-font);
+  letter-spacing: 0.14em;
+  text-align: center;
 }
 
 .md-typeset table:not([class]) {
