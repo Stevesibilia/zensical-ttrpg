@@ -295,7 +295,8 @@
 }
 
 /* With front matter: "Session 15 · 6 June 2025" above the title, and the
-   excerpt in a summary box under it. An old date line is then redundant. */
+   excerpt in a summary box under it. A date line written in the page stays
+   where it is: remove it from the page if the front matter has the date. */
 .md-typeset .ttrpg-eyebrow {
   margin: 0 0 0.2em;
   color: var(--ttrpg-muted);
@@ -321,10 +322,6 @@
 .md-typeset .ttrpg-brief p {
   margin: 0;
   font-size: 0.95em;
-}
-
-.md-typeset .ttrpg-head:has(.ttrpg-eyebrow) + .ttrpg-brief + p:has(> em:only-child) {
-  display: none;
 }
 
 /* The title block: <header class="ttrpg-head"> around the page's h1, with
