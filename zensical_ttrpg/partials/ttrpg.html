@@ -1,0 +1,218 @@
+{#-
+  Pieces shared by the zensical-ttrpg templates.
+
+  Session pages are the pages with `session` in their front matter:
+
+    session: 15
+    date: 2025-06-06
+    excerpt: One or two sentences on what happened.
+
+  Character pages may carry a `portrait` (a path from the docs folder). Every
+  piece falls back to what the page has when a key is missing.
+-#}
+
+{#- Interface text, by the site's language (theme.language), English otherwise. -#}
+{% macro t(key) -%}
+  {%- set text = {
+    "it": {
+      "session": "Sessione",
+      "summary": "In breve",
+      "new": "Nuova",
+      "latest": "Ultima sessione",
+      "read": "Leggi il resoconto →",
+      "party": "I protagonisti",
+      "map": "La mappa",
+      "other_pages": "Altre pagine",
+      "portrait_of": "Ritratto di",
+      "identity": "Identità"
+    },
+    "en": {
+      "session": "Session",
+      "summary": "Summary",
+      "new": "New",
+      "latest": "Latest session",
+      "read": "Read the session →",
+      "party": "The party",
+      "map": "The map",
+      "other_pages": "Other pages",
+      "portrait_of": "Portrait of",
+      "identity": "Identity"
+    }
+  } -%}
+  {%- set language = (config.theme.language or "en")[0:2] -%}
+  {{- (text[language] or text["en"])[key] -}}
+{%- endmacro %}
+
+{#- `2025-06-06` as `6 giugno 2025` or `6 June 2025`. -#}
+{% macro long_date(value) -%}
+  {%- set months = {
+    "it": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+    "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  } -%}
+  {%- set language = (config.theme.language or "en")[0:2] -%}
+  {%- set names = months[language] or months["en"] -%}
+  {%- set text = value | string -%}
+  {{ text[8:10] | int }} {{ names[(text[5:7] | int) - 1] }} {{ text[0:4] }}
+{%- endmacro %}
+
+{#- "Session 15 · 6 June 2025", from a page's front matter. -#}
+{% macro session_line(meta) -%}
+  {{ t("session") }} {{ meta.session }}{% if meta.date %} · {{ long_date(meta.date) }}{% endif %}
+{%- endmacro %}
+
+{#- Whether a nav item is a session page: "yes" or nothing. -#}
+{% macro is_session(item) -%}
+  {%- if item.meta and item.meta.session -%}yes{%- endif -%}
+{%- endmacro %}
+
+{#- A section's session pages, newest first, then its other pages. -#}
+{% macro session_timeline(children) %}
+  {% set state = namespace(newest = true) %}
+  <ol class="ttrpg-timeline" reversed>
+    {% for child in children | reverse %}
+      {% if is_session(child) %}
+        <li>
+          <span class="ttrpg-timeline__number">{{ child.meta.session }}</span>
+          <div class="ttrpg-timeline__body">
+            <a class="ttrpg-timeline__title" href="{{ child.url | url }}">{{ child.title }}</a>
+            {% if state.newest %}
+              <span class="ttrpg-badge">{{ t("new") }}</span>
+              {% set state.newest = false %}
+            {% endif %}
+            {% if child.meta.date %}
+              <span class="ttrpg-timeline__date">{{ long_date(child.meta.date) }}</span>
+            {% endif %}
+            {% if child.meta.excerpt %}
+              <p class="ttrpg-timeline__excerpt">{{ child.meta.excerpt }}</p>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+  {% set others = namespace(count = 0) %}
+  {% for child in children %}
+    {% if not loop.first and not is_session(child) %}
+      {% set others.count = others.count + 1 %}
+    {% endif %}
+  {% endfor %}
+  {% if others.count %}
+    <nav class="ttrpg-contents" aria-label="{{ t('other_pages') }}">
+      <ul>
+        {% for child in children %}
+          {% if not loop.first and not is_session(child) %}
+            {% set target = child.children | first if child.children else child %}
+            <li><a href="{{ target.url | url }}">{{ child.title }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}
+
+{#- The pages of a section other than its first, as a plain list. -#}
+{% macro page_list(item) %}
+  <nav class="ttrpg-contents" aria-label="{{ item.title }}">
+    <ul>
+      {% for child in item.children %}
+        {% if not loop.first %}
+          {% set target = child.children | first if child.children else child %}
+          <li><a href="{{ target.url | url }}">{{ child.title }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+{% endmacro %}
+
+{#-
+  The first page of a section lists the rest of it: a timeline when the
+  section holds session pages, a plain list otherwise.
+-#}
+{% macro section_contents(items) %}
+  {% for item in items %}
+    {% if item.children %}
+      {% set first = item.children | first %}
+      {% if first.url == page.url and item.children | length > 1 %}
+        {% set found = namespace(sessions = false) %}
+        {% for child in item.children %}
+          {% if is_session(child) %}
+            {% set found.sessions = true %}
+          {% endif %}
+        {% endfor %}
+        {% if found.sessions %}
+          {{ session_timeline(item.children) }}
+        {% else %}
+          {{ page_list(item) }}
+        {% endif %}
+      {% else %}
+        {{ section_contents(item.children) }}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{#-
+  The home page, when its front matter says `hub: true`: the latest session,
+  the characters (the pages with a `portrait`, up to three levels deep), and
+  the map from the front matter's `map` and `map_thumbnail`.
+-#}
+{% macro home_hub() %}
+  {% set found = namespace(latest = none, party = []) %}
+  {% for section in nav.items %}
+    {% for child in section.children or [] %}
+      {% if is_session(child) %}
+        {% set found.latest = child %}
+      {% endif %}
+      {% if child.meta and child.meta.portrait %}
+        {% set found.party = found.party + [child] %}
+      {% endif %}
+      {% for grandchild in child.children or [] %}
+        {% if is_session(grandchild) %}
+          {% set found.latest = grandchild %}
+        {% endif %}
+        {% if grandchild.meta and grandchild.meta.portrait %}
+          {% set found.party = found.party + [grandchild] %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% endfor %}
+  <div class="ttrpg-hub">
+    {% set latest = found.latest %}
+    {% if latest %}
+      <section class="ttrpg-hub__block">
+        <h2>{{ t("latest") }}</h2>
+        <a class="ttrpg-hub__session" href="{{ latest.url | url }}">
+          <span class="ttrpg-hub__eyebrow">{{ session_line(latest.meta) }}</span>
+          <span class="ttrpg-hub__title">{{ latest.title }}</span>
+          {% if latest.meta.excerpt %}
+            <span class="ttrpg-hub__excerpt">{{ latest.meta.excerpt }}</span>
+          {% endif %}
+          <span class="ttrpg-hub__more">{{ t("read") }}</span>
+        </a>
+      </section>
+    {% endif %}
+    {% if found.party %}
+      <section class="ttrpg-hub__block">
+        <h2>{{ t("party") }}</h2>
+        <ul class="ttrpg-party">
+          {% for member in found.party %}
+            <li>
+              <a href="{{ member.url | url }}">
+                <img src="{{ member.meta.portrait | url }}" alt="" loading="lazy">
+                <span>{{ member.title }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+    {% if page.meta.map %}
+      <section class="ttrpg-hub__block">
+        <h2>{{ t("map") }}</h2>
+        <a class="ttrpg-hub__map" href="{{ page.meta.map | url }}">
+          <img src="{{ (page.meta.map_thumbnail or page.meta.map) | url }}" alt="{{ page.meta.map_alt or t('map') }}" loading="lazy">
+        </a>
+      </section>
+    {% endif %}
+  </div>
+{% endmacro %}

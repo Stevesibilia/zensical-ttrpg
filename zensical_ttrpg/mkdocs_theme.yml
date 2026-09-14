@@ -1,0 +1,3 @@
+# zensical-ttrpg extends Zensical's own theme, in its classic variant.
+extends: zensical
+variant: classic

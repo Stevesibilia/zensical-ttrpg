@@ -1,0 +1,57 @@
+# An example campaign site on zensical-ttrpg. Build it with:
+#   pip install .. && zensical build
+site_name: The Salt Road
+site_dir: site
+
+theme:
+  name: ttrpg
+  language: en
+  font:
+    text: Alegreya
+    code: Source Code Pro
+  palette:
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to day
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/candle
+        name: Switch to candlelight
+  features:
+    - navigation.tabs
+    - navigation.footer
+    - navigation.top
+    - content.tooltips
+    - search.highlight
+
+extra:
+  ttrpg:
+    palette: marina
+    heading_font: IM Fell English SC
+
+nav:
+  - Home: index.md
+  - Sessions:
+      - sessions/index.md
+      - sessions/session-1.md
+      - sessions/session-2.md
+  - Characters:
+      - characters/index.md
+      - characters/mira.md
+  - Maps: maps/index.md
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - md_in_html
+  - def_list
+  - tables
+  - pymdownx.snippets:
+      auto_append:
+        - includes/glossary.md
