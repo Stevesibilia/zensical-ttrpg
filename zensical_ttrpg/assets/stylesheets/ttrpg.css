@@ -265,6 +265,23 @@
   cursor: help;
 }
 
+/* A glossary name that links to the codex: it reads as text, keeps the
+   dotted underline of its tooltip, and shows it is a link on hover. */
+.md-typeset a.ttrpg-codex-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.md-typeset a.ttrpg-codex-link:hover abbr,
+.md-typeset a.ttrpg-codex-link:focus-visible abbr {
+  color: var(--ttrpg-strong);
+  text-decoration-style: solid;
+}
+
+.md-typeset a.ttrpg-codex-link abbr {
+  cursor: pointer;
+}
+
 /* The tooltip itself: readable, on paper, with a brass edge. */
 .md-tooltip2 {
   --md-tooltip-width: 17rem;

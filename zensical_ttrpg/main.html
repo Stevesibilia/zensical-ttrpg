@@ -17,7 +17,10 @@
     drop_cap:         `illuminated` for a boxed, engraved drop cap
     corners:          `filigree` for ornaments in the corners of the page
     boxes:            `cartouche` for raised boxes with small corner ornaments
-  The last four become classes on .md-content (see the container block).
+    codex:            the codex page (e.g. `personaggi/png/`): glossary names
+                      link to it, at the anchor named after them
+  subheadings, drop_cap, corners and boxes become classes on .md-content
+  (see the container block).
 -#}
 {% set options = (config.extra.ttrpg if config.extra and config.extra.ttrpg else {}) %}
 {% set palette = options.palette or "marina" %}
@@ -77,4 +80,7 @@
 {% block scripts %}
   {{ super() }}
   <script src="{{ 'assets/javascripts/ttrpg-lightbox.js' | url }}"></script>
+  {% if options.codex and (page.url | trim("/")) != (options.codex | trim("/")) %}
+    <script src="{{ 'assets/javascripts/ttrpg-codex-links.js' | url }}" data-codex="{{ options.codex | url }}"></script>
+  {% endif %}
 {% endblock %}

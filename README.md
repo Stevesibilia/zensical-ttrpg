@@ -42,7 +42,7 @@ Zensical, from a release tag:
 
 ```text
 zensical==0.0.62
-zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.4.2.tar.gz
+zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.5.0.tar.gz
 ```
 
 No git is needed to install it, so it works in slim Docker images.
@@ -83,6 +83,7 @@ extra:
     palette: marina # a file in assets/stylesheets/palettes/
     heading_font: IM Fell English SC # any Google Fonts family, or false
     title: left # or centered
+    codex: characters/npcs/ # optional: glossary names link here
 
 markdown_extensions:
   - abbr
@@ -206,6 +207,30 @@ A glossary file holds one abbreviation per line:
 With `abbr` and `pymdownx.snippets` set up as above, every occurrence of the
 name, on every page, shows the description on hover. The match is exact and
 longest-first; keep common words out.
+
+With a codex page, the names also link to it:
+
+```yaml
+extra:
+  ttrpg:
+    codex: characters/npcs/ # the codex page, from the docs folder
+```
+
+Each name in the text (not in headings, not already in a link) becomes a link
+to that page, at the anchor named after it: the name lowercased, accents
+removed, and every run of other characters turned into a dash
+(`Loïc du Kervern` → `#loic-du-kervern`, `l'Ingegnere` → `#l-ingegnere`). Give
+the codex page one anchor per name and alias, before its heading:
+
+```markdown
+<a id="janina-la-kobolda-heilsberg"></a>
+<a id="janina"></a>
+
+### Janina "la Kobolda" Heilsberg
+```
+
+A name with no anchor lands at the top of the page. The codex page itself is
+left alone.
 
 ## Palettes
 

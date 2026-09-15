@@ -33,6 +33,7 @@ extra:
   ttrpg:
     palette: marina
     heading_font: IM Fell English SC
+    codex: characters/codex/
 
 nav:
   - Home: index.md
@@ -43,6 +44,7 @@ nav:
   - Characters:
       - characters/index.md
       - characters/mira.md
+      - characters/codex.md
   - Maps: maps/index.md
 
 markdown_extensions:

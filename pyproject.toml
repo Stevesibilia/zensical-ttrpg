@@ -1,6 +1,6 @@
 [project]
 name = "zensical-ttrpg"
-version = "0.4.2"
+version = "0.5.0"
 description = "A theme for tabletop RPG campaign sites, on top of Zensical"
 readme = "README.md"
 license = "MIT"
