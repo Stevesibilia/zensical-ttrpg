@@ -230,7 +230,38 @@ the codex page one anchor per name and alias, before its heading:
 ```
 
 A name with no anchor lands at the top of the page. The codex page itself is
-left alone.
+left alone: its names are not turned into links.
+
+The codex page gets the `ttrpg-codex` class on `.md-content`, and the theme
+lays it out from the page's structure, with no classes or attribute lists in
+the Markdown:
+
+```markdown
+# Codex
+
+[People 12](#people) · [Places 4](#places)
+
+## People
+
+<a id="tobin"></a>
+
+### Tobin
+
+**Status:** alive
+
+The oldest drover of the caravan.
+
+**Appears in:** [Session 1](../sessions/session-1.md) [Session 2](../sessions/session-2.md)
+```
+
+- The first paragraph after the title is the index of the page's sections:
+  one centred line in small caps, with links in the text colour.
+- Each entry's heading has a hairline above it, except the first of a
+  section, and its name is not marked as a tooltip.
+- A paragraph of a bold label and links only, as "Appears in:" above, is a
+  row of chips on the box colour, with the label in small caps. Separate the
+  links with a space, not a comma. A bold line with no link, such as the
+  status, keeps its look.
 
 ## Palettes
 

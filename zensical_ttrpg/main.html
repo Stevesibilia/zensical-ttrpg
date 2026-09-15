@@ -18,9 +18,10 @@
     corners:          `filigree` for ornaments in the corners of the page
     boxes:            `cartouche` for raised boxes with small corner ornaments
     codex:            the codex page (e.g. `personaggi/png/`): glossary names
-                      link to it, at the anchor named after them
+                      link to it, at the anchor named after them, and the
+                      page itself gets the codex layout (ttrpg-codex)
   subheadings, drop_cap, corners and boxes become classes on .md-content
-  (see the container block).
+  (see the container block), and so does codex, on the codex page only.
 -#}
 {% set options = (config.extra.ttrpg if config.extra and config.extra.ttrpg else {}) %}
 {% set palette = options.palette or "marina" %}
@@ -58,6 +59,7 @@
     {%- if options.drop_cap == "illuminated" %} ttrpg-illuminated{% endif -%}
     {%- if options.corners == "filigree" %} ttrpg-corners{% endif -%}
     {%- if options.boxes == "cartouche" %} ttrpg-cartouche{% endif -%}
+    {%- if options.codex and (page.url | trim("/")) == (options.codex | trim("/")) %} ttrpg-codex{% endif -%}
   {%- endset %}
   <div class="md-content{{ modifiers }}" data-md-component="content">
     {% if "navigation.path" in (config.theme.features or []) %}
