@@ -30,23 +30,6 @@
   {% endif %}
 {% endif %}
 
-{#-
-  A hand-written date line (*06.06.2025* or *6.6.2025* on a line of its own)
-  that repeats the front matter's date: the session line above the title
-  already says it. Only that exact date is dropped; any other italic line,
-  such as a chronicle's subtitle, stays.
--#}
-{% if meta.date %}
-  {% set date = meta.date | string %}
-  {% set year, month, day = date[0:4], date[5:7], date[8:10] %}
-  {% set short_month, short_day = month | int | string, day | int | string %}
-  {% set cleaned = namespace(html = html) %}
-  {% for form in [day ~ "." ~ month, short_day ~ "." ~ short_month, day ~ "." ~ short_month, short_day ~ "." ~ month] %}
-    {% set cleaned.html = cleaned.html | replace("<p><em>" ~ form ~ "." ~ year ~ "</em></p>", "") %}
-  {% endfor %}
-  {% set html = cleaned.html %}
-{% endif %}
-
 {#- The title block, the session line and the summary box. -#}
 {% if "</h1>" in html %}
   {% set head_open %}
