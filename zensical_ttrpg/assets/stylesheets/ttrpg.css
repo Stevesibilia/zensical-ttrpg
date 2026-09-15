@@ -297,6 +297,84 @@
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
 }
 
+/* ---------- Codex page ---------- */
+
+/* The page at extra.ttrpg.codex has the ttrpg-codex class, and is plain
+   Markdown: the rules find its parts by structure. The index of kinds is
+   the first paragraph after the title: one line of links, small caps. */
+.ttrpg-codex .md-typeset .ttrpg-head + p {
+  margin: 0 auto 2.6em;
+  text-align: center;
+  color: var(--ttrpg-muted);
+  font-size: 0.9em;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+}
+
+.ttrpg-codex .md-typeset .ttrpg-head + p a {
+  color: var(--ttrpg-ink);
+  text-decoration: none;
+}
+
+.ttrpg-codex .md-typeset .ttrpg-head + p a:hover,
+.ttrpg-codex .md-typeset .ttrpg-head + p a:focus-visible {
+  color: var(--ttrpg-strong);
+}
+
+/* One entry, one block: a hairline above each name, except the first of a
+   section, which sits under the section heading and its anchors. Python-
+   Markdown puts the anchors in a paragraph of their own. The name is the
+   entry itself, so its tooltip is not marked. */
+.ttrpg-codex .md-typeset h3 {
+  border-top: 1px solid rgba(var(--ttrpg-ink-rgb), 0.12);
+  padding-top: 0.9em;
+  margin-top: 1.05em;
+}
+
+.ttrpg-codex .md-typeset h2 + h3,
+.ttrpg-codex .md-typeset h2 + p:has(> a[id]:first-child) + h3 {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.ttrpg-codex .md-typeset h3 abbr {
+  text-decoration: none;
+  cursor: inherit;
+}
+
+/* "Appears in": a label in bold, then links and nothing else. The links
+   are a row of chips. The status line has no link, and a description has
+   more than a label and links, so neither is touched. */
+.ttrpg-codex .md-typeset p:has(> strong:first-child):has(> a):not(:has(> :not(strong, a))) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 0.45em;
+  align-items: baseline;
+  font-size: 0.85em;
+}
+
+.ttrpg-codex .md-typeset p:has(> strong:first-child):has(> a):not(:has(> :not(strong, a))) strong {
+  color: var(--ttrpg-muted);
+  font-variant: small-caps;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+.ttrpg-codex .md-typeset p:has(> strong:first-child):has(> a):not(:has(> :not(strong, a))) a {
+  padding: 0.08em 0.55em 0.12em;
+  border-radius: 2px;
+  background: var(--ttrpg-box);
+  color: var(--ttrpg-ink);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.ttrpg-codex .md-typeset p:has(> strong:first-child):has(> a):not(:has(> :not(strong, a))) a:hover,
+.ttrpg-codex .md-typeset p:has(> strong:first-child):has(> a):not(:has(> :not(strong, a))) a:focus-visible {
+  color: var(--ttrpg-strong);
+  box-shadow: inset 0 -2px 0 var(--ttrpg-brass);
+}
+
 /* ---------- Session pages ---------- */
 
 /* The date line under a session title ("*06.06.2025*"). */
