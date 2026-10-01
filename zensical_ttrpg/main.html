@@ -12,15 +12,20 @@
     subheading_font:  a Google Fonts family for h2 to h4; the heading font
                       when left out
     title:            `centered` for centred titles with rules, as on a
-                      book's chapter openings (see partials/content.html)
+                      book's chapter openings; `banner` for titles on a dark,
+                      torn band (see partials/content.html)
     subheadings:      `rubric` for h2 to h4 in the bold colour over a dark rule
     drop_cap:         `illuminated` for a boxed, engraved drop cap
     corners:          `filigree` for ornaments in the corners of the page
-    boxes:            `cartouche` for raised boxes with small corner ornaments
+    boxes:            `cartouche` for raised boxes with small corner ornaments;
+                      `headed` for boxes hanging from a dark bar
+    tabs:             `thumb` for a tab on the page's edge naming the session
+                      or the section, and session numbers as small tabs
     codex:            the codex page (e.g. `personaggi/png/`): glossary names
                       link to it, at the anchor named after them, and the
                       page itself gets the codex layout (ttrpg-codex)
-  subheadings, drop_cap, corners and boxes become classes on .md-content
+  title (banner only), subheadings, drop_cap, corners, boxes and tabs
+  become classes on .md-content
   (see the container block), and so does codex, on the codex page only.
 -#}
 {% set options = (config.extra.ttrpg if config.extra and config.extra.ttrpg else {}) %}
@@ -59,6 +64,9 @@
     {%- if options.drop_cap == "illuminated" %} ttrpg-illuminated{% endif -%}
     {%- if options.corners == "filigree" %} ttrpg-corners{% endif -%}
     {%- if options.boxes == "cartouche" %} ttrpg-cartouche{% endif -%}
+    {%- if options.boxes == "headed" %} ttrpg-headed{% endif -%}
+    {%- if options.title == "banner" %} ttrpg-banner{% endif -%}
+    {%- if options.tabs == "thumb" %} ttrpg-tabs{% endif -%}
     {%- if options.codex and (page.url | trim("/")) == (options.codex | trim("/")) %} ttrpg-codex{% endif -%}
   {%- endset %}
   <div class="md-content{{ modifiers }}" data-md-component="content">

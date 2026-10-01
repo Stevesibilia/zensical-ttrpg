@@ -5,7 +5,10 @@
     excerpt in a summary box under it;
   - on character pages, the portrait: at the top of the identity box
     (<aside class="ttrpg-infobox" markdown> in the page), or on its own.
-  With extra.ttrpg.title: centered the title block is centred, with rules.
+  With extra.ttrpg.title: centered the title block is centred, with rules;
+  with title: banner it is a dark band with a torn edge, and a session's
+  number in its corner. With extra.ttrpg.tabs: thumb a thumb tab follows it,
+  naming the session or the page's section.
 -#}
 {% import "partials/ttrpg.html" as ttrpg with context %}
 {% include "partials/actions.html" %}
@@ -35,6 +38,8 @@
   {% set head_open %}
     {%- if options.title == "centered" -%}
       <header class="ttrpg-head ttrpg-head--centered">
+    {%- elif options.title == "banner" -%}
+      <header class="ttrpg-head ttrpg-head--banner"{% if meta.session %} data-number="{{ meta.session }}"{% endif %}>
     {%- else -%}
       <header class="ttrpg-head">
     {%- endif -%}
@@ -47,6 +52,13 @@
       <span class="ttrpg-title-rule" aria-hidden="true"></span>
     {%- endif -%}
     </header>
+    {%- if options.tabs == "thumb" -%}
+      {%- if meta.session -%}
+        <aside class="ttrpg-tab" aria-hidden="true"><span class="ttrpg-tab__number">{{ meta.session }}</span><span class="ttrpg-tab__label">{{ ttrpg.t("session") }} {{ meta.session }}</span></aside>
+      {%- elif page.ancestors and page.ancestors[0].title -%}
+        <aside class="ttrpg-tab" aria-hidden="true"><span class="ttrpg-tab__label">{{ page.ancestors[0].title }}</span></aside>
+      {%- endif -%}
+    {%- endif -%}
     {{- portrait_box | safe -}}
     {%- if meta.excerpt -%}
       <aside class="ttrpg-brief" aria-label="{{ ttrpg.t('summary') }}"><span class="ttrpg-brief__label">{{ ttrpg.t("summary") }}</span><p>{{ meta.excerpt }}</p></aside>

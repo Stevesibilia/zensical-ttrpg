@@ -22,6 +22,14 @@
   --ttrpg-vignette: rgba(80, 55, 25, 0.18);
   /* h2 to h4: the heading font, unless extra.ttrpg.subheading_font is set. */
   --ttrpg-subhead-font: var(--ttrpg-head-font);
+  /* `uppercase` sets headings and titles in capitals. */
+  --ttrpg-head-case: none;
+  /* The title band (extra.ttrpg.title: banner): its grunge, pale smudges and
+     dark specks over --ttrpg-band, and its torn bottom edge. Its colours,
+     --ttrpg-band and --ttrpg-band-ink, and the colour of the thumb tabs,
+     --ttrpg-tab, fall back to the header's. */
+  --ttrpg-band-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.014' numOctaves='4' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .9 0 0 0 -.4'/%3E%3C/filter%3E%3Cfilter id='s' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -3 0 0 0 1.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23c%29'/%3E%3Crect width='100%25' height='100%25' filter='url%28%23s%29' opacity='.5'/%3E%3C/svg%3E");
+  --ttrpg-band-edge: polygon(0 0, 100% 0, 100.0% calc(100% - 0px), 97.9% calc(100% - 2px), 95.8% calc(100% - 5px), 93.8% calc(100% - 2px), 91.7% calc(100% - 5px), 89.6% calc(100% - 5px), 87.5% calc(100% - 6px), 85.4% calc(100% - 3px), 83.3% calc(100% - 13px), 81.2% calc(100% - 3px), 79.2% calc(100% - 12px), 77.1% calc(100% - 6px), 75.0% calc(100% - 5px), 72.9% calc(100% - 6px), 70.8% calc(100% - 3px), 68.8% calc(100% - 6px), 66.7% calc(100% - 1px), 64.6% calc(100% - 3px), 62.5% calc(100% - 7px), 60.4% calc(100% - 5px), 58.3% calc(100% - 0px), 56.2% calc(100% - 4px), 54.2% calc(100% - 3px), 52.1% calc(100% - 11px), 50.0% calc(100% - 2px), 47.9% calc(100% - 6px), 45.8% calc(100% - 1px), 43.8% calc(100% - 2px), 41.7% calc(100% - 3px), 39.6% calc(100% - 4px), 37.5% calc(100% - 2px), 35.4% calc(100% - 3px), 33.3% calc(100% - 4px), 31.2% calc(100% - 4px), 29.2% calc(100% - 5px), 27.1% calc(100% - 3px), 25.0% calc(100% - 2px), 22.9% calc(100% - 2px), 20.8% calc(100% - 3px), 18.8% calc(100% - 16px), 16.7% calc(100% - 1px), 14.6% calc(100% - 13px), 12.5% calc(100% - 2px), 10.4% calc(100% - 1px), 8.3% calc(100% - 15px), 6.2% calc(100% - 6px), 4.2% calc(100% - 6px), 2.1% calc(100% - 5px), 0.0% calc(100% - 0px));
   /* The shadow under a raised box (extra.ttrpg.boxes: cartouche). */
   --ttrpg-lift: rgba(40, 20, 5, 0.45);
   /* Filigree for the corners of the page (extra.ttrpg.corners: filigree) and
@@ -76,6 +84,13 @@
   }
 }
 
+/* The space above and beside the text on phones, as tokens (the theme's
+   0.6rem padding and 0.4rem spacer above, 0.8rem margins beside). */
+.md-content__inner {
+  --ttrpg-inner-top: 1rem;
+  --ttrpg-inner-x: 0.8rem;
+}
+
 /* From tablet width up, the page is a sheet of paper on the backdrop. */
 @media screen and (min-width: 60em) {
   .md-main {
@@ -111,10 +126,14 @@
     box-shadow: inset 0 0 70px var(--ttrpg-vignette);
   }
 
+  /* The space above and beside the text, as tokens: the title band bleeds
+     into it. The top counts the theme's own 0.4rem spacer. */
   .md-content__inner {
+    --ttrpg-inner-top: 3rem;
+    --ttrpg-inner-x: 3.2rem;
     position: relative;
     margin: 0;
-    padding: 2.6rem 3.2rem 2rem;
+    padding: 2.6rem var(--ttrpg-inner-x) 2rem;
   }
 
   /* With extra.ttrpg.corners: filigree, an ornament in each corner of the
@@ -130,6 +149,7 @@
   }
 
   .md-content.ttrpg-corners .md-content__inner {
+    --ttrpg-inner-top: 3.8rem;
     padding-top: 3.4rem;
     padding-bottom: 3rem;
   }
@@ -140,6 +160,7 @@
 .md-footer__title,
 .md-nav__title {
   font-family: var(--ttrpg-head-font);
+  text-transform: var(--ttrpg-head-case);
 }
 
 .md-header__topic:first-child {
@@ -183,6 +204,7 @@
   font-weight: 400;
   color: var(--ttrpg-head);
   letter-spacing: 0.01em;
+  text-transform: var(--ttrpg-head-case);
   text-wrap: balance;
 }
 
@@ -302,7 +324,7 @@
 /* The page at extra.ttrpg.codex has the ttrpg-codex class, and is plain
    Markdown: the rules find its parts by structure. The index of kinds is
    the first paragraph after the title: one line of links, small caps. */
-.ttrpg-codex .md-typeset .ttrpg-head + p {
+.ttrpg-codex .md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p {
   margin: 0 auto 2.6em;
   text-align: center;
   color: var(--ttrpg-muted);
@@ -311,13 +333,13 @@
   letter-spacing: 0.1em;
 }
 
-.ttrpg-codex .md-typeset .ttrpg-head + p a {
+.ttrpg-codex .md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p a {
   color: var(--ttrpg-ink);
   text-decoration: none;
 }
 
-.ttrpg-codex .md-typeset .ttrpg-head + p a:hover,
-.ttrpg-codex .md-typeset .ttrpg-head + p a:focus-visible {
+.ttrpg-codex .md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p a:hover,
+.ttrpg-codex .md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p a:focus-visible {
   color: var(--ttrpg-strong);
 }
 
@@ -378,14 +400,14 @@
 /* ---------- Session pages ---------- */
 
 /* The date line under a session title ("*06.06.2025*"). */
-.md-typeset .ttrpg-head + p:has(> em:only-child) {
+.md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p:has(> em:only-child) {
   margin-top: -0.3em;
   color: var(--ttrpg-muted);
   font-variant: small-caps;
   letter-spacing: 0.08em;
 }
 
-.md-typeset .ttrpg-head + p:has(> em:only-child) em {
+.md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p:has(> em:only-child) em {
   font-style: normal;
 }
 
@@ -410,6 +432,7 @@
 .md-typeset .ttrpg-brief__label {
   display: block;
   font-family: var(--ttrpg-head-font);
+  text-transform: var(--ttrpg-head-case);
   color: var(--ttrpg-strong);
   letter-spacing: 0.04em;
 }
@@ -474,13 +497,157 @@
   }
 }
 
+/* With extra.ttrpg.title: banner, the title block is a dark band across the
+   top of the page, with a grunge texture and a torn bottom edge, as on the
+   chapter openings of the Blades in the Dark manual. A session's number
+   shows faintly in its corner. The band bleeds into the space around the
+   text: the --ttrpg-inner-* tokens on the page measure it. */
+.md-typeset .ttrpg-head--banner {
+  position: relative;
+  overflow: hidden;
+  margin: calc(-1 * var(--ttrpg-inner-top)) calc(-1 * var(--ttrpg-inner-x)) 1.4em;
+  padding: calc(var(--ttrpg-inner-top) + 0.3em) var(--ttrpg-inner-x) 1.7em;
+  background:
+    var(--ttrpg-band-texture) center / 340px repeat,
+    var(--ttrpg-band, var(--ttrpg-bar));
+  color: var(--ttrpg-band-ink, var(--ttrpg-bar-ink));
+  clip-path: var(--ttrpg-band-edge);
+}
+
+.md-typeset .ttrpg-head--banner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.md-typeset .ttrpg-head--banner h1 {
+  margin: 0;
+  color: inherit;
+  font-size: 2.7em;
+  line-height: 1;
+}
+
+.md-typeset .ttrpg-head--banner .ttrpg-eyebrow {
+  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.md-typeset .ttrpg-head--banner[data-number]::after {
+  content: attr(data-number);
+  position: absolute;
+  right: 0.25em;
+  bottom: -0.3em;
+  font-family: var(--ttrpg-head-font);
+  font-size: 8.5em;
+  line-height: 1;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+/* The edit and view buttons stay above the band. */
+.ttrpg-banner .md-content__button {
+  position: relative;
+  z-index: 2;
+  color: var(--ttrpg-band-ink, var(--ttrpg-bar-ink));
+}
+
+/* On wide screens the theme gives the text 1.2rem margins beside the
+   sidebars, hidden here. The band and the tab reach the paper's edge, so they
+   become padding: the text keeps its width. */
+@media screen and (min-width: 76.25em) {
+  [dir] .md-main__inner > .md-sidebar ~ .md-content:is(.ttrpg-banner, .ttrpg-tabs) > .md-content__inner {
+    --ttrpg-inner-x: 4.4rem;
+    margin-inline: 0;
+  }
+}
+
+/* On phones the band runs from the header, edge to edge. */
+@media screen and (max-width: 59.9375em) {
+  .md-main__inner:has(> .md-content.ttrpg-banner) {
+    margin-top: 0;
+  }
+
+  .ttrpg-banner .md-content__inner {
+    margin-inline: var(--ttrpg-inner-x);
+  }
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .ttrpg-head--banner h1 {
+    font-size: 2.1em;
+  }
+
+  .md-typeset .ttrpg-head--banner[data-number]::after {
+    font-size: 6.5em;
+  }
+}
+
+/* With extra.ttrpg.tabs: thumb, a tab on the outer edge of the page names
+   the section, or the session and its number, as the thumb tabs of the
+   manual. It sits under the title block, from tablet width up, where the
+   page is a sheet of paper: absolute, with no top, it stays where it is in
+   the text. */
+.md-typeset .ttrpg-tab {
+  display: none;
+}
+
+@media screen and (min-width: 60em) {
+  .ttrpg-tabs .md-typeset .ttrpg-tab {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    width: 1.6rem;
+    padding: 0.4rem 0 1.5rem;
+    background: var(--ttrpg-tab, var(--ttrpg-band, var(--ttrpg-bar)));
+    color: var(--ttrpg-band-ink, var(--ttrpg-bar-ink));
+    font-family: var(--ttrpg-head-font);
+    font-size: 0.62rem;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: var(--ttrpg-head-case);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 0.8rem), 0 100%);
+  }
+
+  /* The point of the tab, in the ornament colour. */
+  .ttrpg-tabs .md-typeset .ttrpg-tab::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 1.1rem;
+    background: var(--ttrpg-brass);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 0.8rem), 0 100%);
+  }
+
+  .md-typeset .ttrpg-tab__number {
+    font-size: 1.25em;
+  }
+
+  /* A slash under the number, as in the manual. */
+  .md-typeset .ttrpg-tab__number::after {
+    content: "";
+    display: block;
+    width: 1.6rem;
+    height: 0.7rem;
+    margin-top: 0.4rem;
+    background: linear-gradient(to bottom left, transparent calc(50% - 0.5px), color-mix(in srgb, currentColor 60%, transparent) 50%, transparent calc(50% + 0.5px));
+  }
+
+  .md-typeset .ttrpg-tab__label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+  }
+}
+
 /* Drop cap on the first paragraph of the story. */
 .md-typeset .ttrpg-brief + p:not(:has(> em:only-child))::first-letter,
 .md-typeset .ttrpg-brief + p:has(> em:only-child) + p::first-letter,
-.md-typeset .ttrpg-head + p:has(> em:only-child) + p::first-letter {
+.md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p:has(> em:only-child) + p::first-letter {
   float: left;
   font-family: var(--ttrpg-head-font);
-  color: var(--ttrpg-head);
+  color: var(--ttrpg-drop-cap, var(--ttrpg-head));
   font-size: 3.7em;
   line-height: 0.8;
   padding: 0.07em 0.09em 0 0;
@@ -490,7 +657,7 @@
    double rule and an engraved crosshatch, as a printed initial. */
 .ttrpg-illuminated .md-typeset .ttrpg-brief + p:not(:has(> em:only-child))::first-letter,
 .ttrpg-illuminated .md-typeset .ttrpg-brief + p:has(> em:only-child) + p::first-letter,
-.ttrpg-illuminated .md-typeset .ttrpg-head + p:has(> em:only-child) + p::first-letter {
+.ttrpg-illuminated .md-typeset :is(.ttrpg-head, .ttrpg-head + .ttrpg-tab) + p:has(> em:only-child) + p::first-letter {
   font-size: 3em;
   line-height: 1;
   margin: 0.16em 0.24em 0 0;
@@ -585,6 +752,35 @@
   text-align: center;
 }
 
+/* With extra.ttrpg.boxes: headed, boxes hang from a dark bar, as the tables
+   of the Blades in the Dark manual: the summary box's label becomes the bar,
+   other boxes and table headers take its colour. */
+.ttrpg-headed .md-typeset :is(.ttrpg-brief, blockquote, .ttrpg-infobox, .ttrpg-hub__session) {
+  border-top: 0.35rem solid var(--ttrpg-tab, var(--ttrpg-band, var(--ttrpg-bar)));
+  border-bottom: 2px solid var(--ttrpg-rule);
+}
+
+.ttrpg-headed .md-typeset .ttrpg-brief {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.ttrpg-headed .md-typeset .ttrpg-brief__label {
+  margin: 0 -1.375em 0.6em;
+  padding: 0.35em 1.375em 0.25em;
+  background: var(--ttrpg-tab, var(--ttrpg-band, var(--ttrpg-bar)));
+  color: var(--ttrpg-band-ink, var(--ttrpg-bar-ink));
+  font-size: 0.8em;
+  letter-spacing: 0.08em;
+}
+
+.ttrpg-headed .md-typeset table:not([class]) th {
+  background: var(--ttrpg-tab, var(--ttrpg-band, var(--ttrpg-bar)));
+  color: var(--ttrpg-band-ink, var(--ttrpg-bar-ink));
+  border-bottom: 0;
+  letter-spacing: 0.06em;
+}
+
 .md-typeset table:not([class]) {
   font-size: 0.9em;
   border: 0;
@@ -593,6 +789,7 @@
 
 .md-typeset table:not([class]) th {
   font-family: var(--ttrpg-head-font);
+  text-transform: var(--ttrpg-head-case);
   font-weight: 400;
   color: var(--ttrpg-head);
   border-bottom: 2px solid var(--ttrpg-rule);
@@ -647,8 +844,31 @@
   text-align: center;
 }
 
+/* With extra.ttrpg.tabs: thumb, the session numbers are small tabs too. */
+.ttrpg-tabs .md-typeset .ttrpg-timeline__number {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.3rem;
+  padding-bottom: 0.2rem;
+  background: var(--ttrpg-tab, var(--ttrpg-band, var(--ttrpg-bar)));
+  color: var(--ttrpg-band-ink, var(--ttrpg-bar-ink));
+  font-size: 1.15em;
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%);
+}
+
+.ttrpg-tabs .md-typeset ol.ttrpg-timeline > li::before {
+  top: 2.6rem;
+  width: 2px;
+  margin-left: -0.5px;
+}
+
 .md-typeset .ttrpg-timeline__title {
   font-family: var(--ttrpg-head-font);
+  text-transform: var(--ttrpg-head-case);
   font-size: 1.15em;
   line-height: 1.2;
   text-decoration: none;
@@ -720,6 +940,7 @@
 
 .md-typeset .ttrpg-contents a {
   font-family: var(--ttrpg-head-font);
+  text-transform: var(--ttrpg-head-case);
   font-size: 1.15em;
   text-decoration: none;
 }
@@ -844,6 +1065,7 @@
 
 .md-typeset .ttrpg-hub__title {
   font-family: var(--ttrpg-head-font);
+  text-transform: var(--ttrpg-head-case);
   color: var(--ttrpg-head);
   font-size: 1.55em;
   line-height: 1.15;
@@ -886,6 +1108,7 @@
   font-family: var(--ttrpg-head-font);
   line-height: 1.2;
   text-align: center;
+  text-transform: var(--ttrpg-head-case);
 }
 
 .md-typeset .ttrpg-party img,

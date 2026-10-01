@@ -1,0 +1,78 @@
+/*
+ * Elettroplasma: the inks and greys of the Blades in the Dark manual, with
+ * the cyan of Doskvol's lightning towers and electroplasmic lamps, over the
+ * rain of a city that never sees the sun. Slab headings in capitals, as in
+ * the manual. Fits any industrial, haunted, noir campaign.
+ *
+ * Suggested with heading_font: Alfa Slab One, text font Crimson Pro,
+ * title: banner, boxes: headed and tabs: thumb, and the dark scheme first.
+ */
+
+/* ---------- Light scheme ---------- */
+[data-md-color-scheme="default"] {
+  --ttrpg-paper: #eff1f1;
+  --ttrpg-ink: #1a1d1f;
+  --ttrpg-ink-rgb: 26, 29, 31;
+  --ttrpg-muted: #59605f;
+  --ttrpg-head: #1a1d1f;
+  --ttrpg-strong: #0d6273;
+  --ttrpg-brass: #2b8798;
+  --ttrpg-box: #dde3e4;
+  --ttrpg-rule: #1f2a2d;
+  --ttrpg-bar: #141a1c;
+  --ttrpg-bar-ink: #e6f0f1;
+  --ttrpg-backdrop-1: #5c6d73;
+  --ttrpg-backdrop-2: #10181b;
+  --ttrpg-grain: 0.42;
+  --ttrpg-grain-blend: multiply;
+  --ttrpg-vignette: rgba(0, 0, 0, 0.16);
+  --ttrpg-band: #232b2e;
+  --ttrpg-band-ink: #eef6f7;
+  --ttrpg-tab: #2a3538;
+}
+
+/* ---------- Dark scheme ---------- */
+[data-md-color-scheme="slate"] {
+  --ttrpg-paper: #171b1d;
+  --ttrpg-ink: #e1e7e8;
+  --ttrpg-ink-rgb: 225, 231, 232;
+  --ttrpg-muted: #98a4a6;
+  --ttrpg-head: #eef4f5;
+  --ttrpg-strong: #70d8e6;
+  --ttrpg-brass: #3fb6c7;
+  --ttrpg-box: #20282b;
+  --ttrpg-rule: #70d8e6;
+  --ttrpg-bar: #0b1012;
+  --ttrpg-bar-ink: #dfeef0;
+  --ttrpg-backdrop-1: #183038;
+  --ttrpg-backdrop-2: #030708;
+  --ttrpg-grain: 0.16;
+  --ttrpg-grain-blend: overlay;
+  --ttrpg-vignette: rgba(0, 0, 0, 0.45);
+  --ttrpg-band: #283236;
+  --ttrpg-band-ink: #eef6f7;
+  --ttrpg-tab: #2c3a3e;
+  --ttrpg-lift: rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Both schemes ---------- */
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+  /* Scene breaks: the manual's diamond, then a bolt of lightning. */
+  --ttrpg-ornament-1: "\25C6";
+  --ttrpg-ornament-2: "\03DF";
+
+  /* Headings in capitals, and the drop cap in the accent colour. */
+  --ttrpg-head-case: uppercase;
+  --ttrpg-drop-cap: var(--ttrpg-strong);
+
+  /* Rain behind the page: thin pale streaks. Generated in the browser. */
+  --ttrpg-backdrop-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='r' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .007' numOctaves='2' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .9 0 0 0 0 .95 10 0 0 0 -6.6'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='.2'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23r%29'/%3E%3C/svg%3E");
+  --ttrpg-backdrop-size: 400px;
+
+  /* A cold, grey paper grain instead of the warm default. */
+  --ttrpg-paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .42 0 0 0 0 .44 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E");
+
+  /* Crimson Pro reads small: a step up from the default size. */
+  --ttrpg-text-size: clamp(18px, 0.95rem, 20px);
+}

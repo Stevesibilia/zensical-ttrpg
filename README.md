@@ -29,7 +29,8 @@ speaks Italian or English, following `theme.language`.
   opens it full screen, with zoom, pinch and pan.
 - **Tooltips**: names from a glossary show a short description on hover.
 - **Palettes**: colours, backdrop, paper grain and scene-break ornaments come
-  from a palette: `marina`, `sangue-e-neve` and `oro-di-copertina` so far. A
+  from a palette: `marina`, `sangue-e-neve`, `oro-di-copertina` and
+  `elettroplasma` so far. A
   light and a dark scheme each, with a toggle.
 - **Book-like touches**, each optional: centred titles, as on a book's chapter
   openings; subheadings as rubrics; an illuminated drop cap; filigree in the
@@ -42,7 +43,7 @@ Zensical, from a release tag:
 
 ```text
 zensical==0.0.62
-zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.5.2.tar.gz
+zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.7.0.tar.gz
 ```
 
 No git is needed to install it, so it works in slim Docker images.
@@ -82,7 +83,7 @@ extra:
   ttrpg:
     palette: marina # a file in assets/stylesheets/palettes/
     heading_font: IM Fell English SC # any Google Fonts family, or false
-    title: left # or centered
+    title: left # or centered, or banner
     codex: characters/npcs/ # optional: glossary names link here
 
 markdown_extensions:
@@ -110,12 +111,27 @@ extra:
     drop_cap: illuminated # the drop cap in a box with a double rule
     corners: filigree # an ornament in each corner of the page
     boxes: cartouche # boxes raised off the page, with corner ornaments
+    tabs: thumb # a thumb tab on the page's edge, as in a manual
 ```
 
 Without `subheading_font`, h2 to h4 use the heading font. `boxes: cartouche`
 applies to the summary box, quotes (`>`), the identity box and the latest
 session on the home page. The corners show from tablet width up, where the
 page is a sheet of paper.
+
+Some options come from the Blades in the Dark manual, for `elettroplasma`,
+and fit any palette:
+
+- `title: banner`: the title on a dark band across the top of the page, with
+  a grunge texture and a torn bottom edge. A session's number shows faintly in
+  its corner.
+- `boxes: headed`: boxes hang from a dark bar, as the manual's tables. The
+  summary box's label becomes the bar; quotes, the identity box, the latest
+  session on the home page and table headers take its colour.
+- `tabs: thumb`: a tab on the outer edge of the page, under the title, with
+  the session and its number, or the name of the page's section. The session
+  numbers in the timeline become small tabs too. The tab shows from tablet
+  width up.
 
 ## Writing pages
 
@@ -270,6 +286,7 @@ The oldest drover of the caravan.
 | `marina`           | navy and brass on parchment                   | pale blue and brass on slate     | the sea, seen from a plane           | ⚓ ✥      | IM Fell English SC, Alegreya                                                                        |
 | `sangue-e-neve`    | crimson on cold white, petrol header          | rose-red on night, petrol header | falling snow                         | ☾ ✠       | Cinzel, EB Garamond, `title: centered`                                                              |
 | `oro-di-copertina` | blood red on parchment, black and gold header | gold on near-black               | an oil glaze, warm glows in the dark | ⚜ ❦       | Grenze Gotisch (600), Libre Caslon Text, IM Fell English SC for subheadings, and every style option |
+| `elettroplasma`    | ink and cyan on cold grey paper               | electric cyan on charcoal        | rain                                 | ◆ ϟ       | Alfa Slab One, Crimson Pro, `title: banner`, `boxes: headed`, `tabs: thumb`, the dark scheme first  |
 
 A session page in each palette, light scheme on the left and dark on the
 right. These come from the mock-ups the palettes were chosen on, with text
@@ -286,6 +303,10 @@ from real campaigns, so a detail or two differs from the theme.
 `oro-di-copertina`, for a Historia campaign:
 
 ![A session page in the oro-di-copertina palette, light and dark](screenshots/oro-di-copertina.jpg)
+
+`elettroplasma`, for a Blades in the Dark campaign, on the example site:
+
+![A session page in the elettroplasma palette, light and dark](screenshots/elettroplasma.jpg)
 
 ### Your own palette
 
@@ -330,6 +351,13 @@ Optional tokens, for either scheme or both:
 --ttrpg-lift: rgba(40, 20, 5, 0.45); /* shadow under raised boxes */
 --ttrpg-corners: url(...); /* page corners, all four in one image */
 --ttrpg-box-corners: url(...); /* box corners, the same way */
+--ttrpg-head-case: uppercase; /* headings in capitals; none by default */
+--ttrpg-drop-cap: #0d6273; /* the drop cap; --ttrpg-head by default */
+--ttrpg-band: #232b2e; /* the title band (title: banner); the header's colour by default */
+--ttrpg-band-ink: #eef6f7; /* its text, and the text on bars and tabs */
+--ttrpg-band-texture: url(...); /* its grunge; pale smudges by default */
+--ttrpg-band-edge: polygon(...); /* its torn edge, as a clip-path */
+--ttrpg-tab: #2a3538; /* thumb tabs and box bars; the band's colour by default */
 ```
 
 The corner images are masks: only their shape counts, and they take the
