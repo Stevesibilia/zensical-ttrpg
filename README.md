@@ -43,7 +43,7 @@ Zensical, from a release tag:
 
 ```text
 zensical==0.0.62
-zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.7.0.tar.gz
+zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.8.0.tar.gz
 ```
 
 No git is needed to install it, so it works in slim Docker images.
@@ -133,6 +133,28 @@ and fit any palette:
   numbers in the timeline become small tabs too. The tab shows from tablet
   width up.
 
+How a character page shows its portrait, `box` unless set:
+
+```yaml
+extra:
+  ttrpg:
+    portrait: auto # box, cover, print or auto
+    portrait_trim: 3 # optional: % cropped off each edge
+```
+
+- `box`: in the identity box, as below.
+- `cover`: across the page under the title, edge to edge, fading into the
+  paper. Under `title: banner` it starts beneath the band's torn edge.
+- `print`: a print beside the text, with a shadow. The palette gives it an
+  edge and a tilt (`--ttrpg-print-edge`, `--ttrpg-print-tilt`): torn and askew
+  in `elettroplasma`, plain in the others. A tall or square picture gets a
+  narrower print.
+- `auto`: the cover for a wide picture, the print for a tall or square one.
+
+Outside `box` the picture opens full screen on a click, and the identity box,
+when the page has one, goes without it. `portrait_trim` is for pictures that
+carry a border of their own, a painted paper edge for one.
+
 ## Writing pages
 
 ### Sessions
@@ -184,7 +206,8 @@ The rest of the page...
 ```
 
 The portrait is placed at the top of the box; a page with a portrait and no
-box gets the portrait on its own, beside the text. A character without a
+box gets the portrait on its own, beside the text (with `portrait: box`, the
+default; see Style options for the others). A character without a
 portrait can say `character: true` to still appear on the home page, with its
 initial. A list of sayings can go in `<div class="ttrpg-quotes" markdown>`.
 

@@ -66,6 +66,11 @@
   --ttrpg-head-case: uppercase;
   --ttrpg-drop-cap: var(--ttrpg-strong);
 
+  /* A portrait print (extra.ttrpg.portrait: print or auto) with torn edges,
+     a little askew, as a photograph pinned up in a hideout. */
+  --ttrpg-print-tilt: -1.5deg;
+  --ttrpg-print-edge: polygon(1% 2%, 12% 0, 25% 1.5%, 38% 0.5%, 52% 2%, 66% 0, 80% 1.5%, 93% 0.3%, 99% 1.8%, 100% 15%, 98.8% 32%, 100% 50%, 99% 68%, 100% 85%, 98.5% 99%, 85% 98%, 70% 100%, 55% 98.5%, 40% 100%, 25% 98.2%, 10% 100%, 0.5% 98%, 0 80%, 1.2% 62%, 0 45%, 1% 28%, 0 12%);
+
   /* Rain behind the page: thin pale streaks. Generated in the browser. */
   --ttrpg-backdrop-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='r' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .007' numOctaves='2' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .9 0 0 0 0 .95 10 0 0 0 -6.6'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='.2'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23r%29'/%3E%3C/svg%3E");
   --ttrpg-backdrop-size: 400px;

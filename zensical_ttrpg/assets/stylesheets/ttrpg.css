@@ -32,6 +32,11 @@
   --ttrpg-band-edge: polygon(0 0, 100% 0, 100.0% calc(100% - 0px), 97.9% calc(100% - 2px), 95.8% calc(100% - 5px), 93.8% calc(100% - 2px), 91.7% calc(100% - 5px), 89.6% calc(100% - 5px), 87.5% calc(100% - 6px), 85.4% calc(100% - 3px), 83.3% calc(100% - 13px), 81.2% calc(100% - 3px), 79.2% calc(100% - 12px), 77.1% calc(100% - 6px), 75.0% calc(100% - 5px), 72.9% calc(100% - 6px), 70.8% calc(100% - 3px), 68.8% calc(100% - 6px), 66.7% calc(100% - 1px), 64.6% calc(100% - 3px), 62.5% calc(100% - 7px), 60.4% calc(100% - 5px), 58.3% calc(100% - 0px), 56.2% calc(100% - 4px), 54.2% calc(100% - 3px), 52.1% calc(100% - 11px), 50.0% calc(100% - 2px), 47.9% calc(100% - 6px), 45.8% calc(100% - 1px), 43.8% calc(100% - 2px), 41.7% calc(100% - 3px), 39.6% calc(100% - 4px), 37.5% calc(100% - 2px), 35.4% calc(100% - 3px), 33.3% calc(100% - 4px), 31.2% calc(100% - 4px), 29.2% calc(100% - 5px), 27.1% calc(100% - 3px), 25.0% calc(100% - 2px), 22.9% calc(100% - 2px), 20.8% calc(100% - 3px), 18.8% calc(100% - 16px), 16.7% calc(100% - 1px), 14.6% calc(100% - 13px), 12.5% calc(100% - 2px), 10.4% calc(100% - 1px), 8.3% calc(100% - 15px), 6.2% calc(100% - 6px), 4.2% calc(100% - 6px), 2.1% calc(100% - 5px), 0.0% calc(100% - 0px));
   /* The shadow under a raised box (extra.ttrpg.boxes: cartouche). */
   --ttrpg-lift: rgba(40, 20, 5, 0.45);
+  /* The portrait outside extra.ttrpg.portrait: box. The print's edge (a
+     clip-path) and tilt, plain by default; the part of a cover kept in view. */
+  --ttrpg-print-edge: none;
+  --ttrpg-print-tilt: 0deg;
+  --ttrpg-cover-focus: 50% 30%;
   /* Filigree for the corners of the page (extra.ttrpg.corners: filigree) and
      of the boxes (boxes: cartouche). Each is one image holding all four
      corners, used as a mask: the colour comes from --ttrpg-brass. */
@@ -1149,6 +1154,101 @@
     display: block;
     width: 60%;
     margin-inline: auto;
+  }
+}
+
+/* With extra.ttrpg.portrait: cover, print or auto, the portrait is a figure
+   under the title, linked to itself so it opens full screen. Any frame is
+   left to the picture; --ttrpg-portrait-zoom, from portrait_trim, crops a
+   border off its edges. */
+.md-typeset .ttrpg-figure {
+  display: block;
+  width: auto;
+  max-width: none;
+  margin: 0;
+}
+
+.md-typeset .ttrpg-figure__frame {
+  display: block;
+  overflow: hidden;
+}
+
+.md-typeset .ttrpg-figure img {
+  display: block;
+  width: 100%;
+  transform: scale(var(--ttrpg-portrait-zoom, 1));
+}
+
+/* The cover: across the page, edge to edge, fading into the paper. Under a
+   title band it starts beneath the band's torn edge. */
+.md-typeset .ttrpg-figure--cover {
+  position: relative;
+  margin: 0 calc(-1 * var(--ttrpg-inner-x)) 1.2em;
+}
+
+.md-typeset .ttrpg-figure--cover .ttrpg-figure__frame {
+  aspect-ratio: 21 / 9;
+}
+
+.md-typeset .ttrpg-figure--cover img {
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--ttrpg-cover-focus);
+}
+
+.md-typeset .ttrpg-figure--cover::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 45%;
+  background: linear-gradient(to bottom, transparent, var(--ttrpg-paper));
+  pointer-events: none;
+}
+
+.md-typeset .ttrpg-head--banner:has(~ .ttrpg-figure--cover) {
+  z-index: 1;
+}
+
+.md-typeset .ttrpg-head--banner ~ .ttrpg-figure--cover {
+  margin-top: calc(-1.4em - 1.2rem);
+}
+
+/* The print: beside the text, cut by the palette's --ttrpg-print-edge,
+   turned by --ttrpg-print-tilt, with a shadow under it. A tall or square
+   picture gets a narrower one. An identity box goes under it. */
+.md-typeset .ttrpg-figure--print {
+  float: right;
+  width: 15rem;
+  margin: 0.4em 0 1.2em 1.8em;
+  filter: drop-shadow(0 0.7rem 0.9rem var(--ttrpg-lift));
+  transform: rotate(var(--ttrpg-print-tilt));
+}
+
+.md-typeset .ttrpg-figure--print[data-shape="tall"] {
+  width: 12rem;
+}
+
+.md-typeset .ttrpg-figure--print .ttrpg-figure__frame {
+  clip-path: var(--ttrpg-print-edge);
+}
+
+.md-typeset .ttrpg-figure--print ~ .ttrpg-infobox {
+  clear: right;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .ttrpg-figure--cover .ttrpg-figure__frame {
+    aspect-ratio: 16 / 10;
+  }
+
+  .md-typeset .ttrpg-figure--print {
+    float: none;
+    width: 75%;
+    margin: 0.4em auto 1.6em;
+  }
+
+  .md-typeset .ttrpg-figure--print[data-shape="tall"] {
+    width: 60%;
   }
 }
 

@@ -24,6 +24,13 @@
     codex:            the codex page (e.g. `personaggi/png/`): glossary names
                       link to it, at the anchor named after them, and the
                       page itself gets the codex layout (ttrpg-codex)
+    portrait:         how a character page shows its portrait: `box` (the
+                      default) in the identity box; `cover` across the page
+                      under the title; `print` as a print beside the text;
+                      `auto` the cover for a wide picture, else the print
+                      (see partials/content.html)
+    portrait_trim:    a percentage cropped off each edge of the portrait
+                      outside `box`, for pictures with a border of their own
   title (banner only), subheadings, drop_cap, corners, boxes and tabs
   become classes on .md-content
   (see the container block), and so does codex, on the codex page only.
@@ -92,5 +99,8 @@
   <script src="{{ 'assets/javascripts/ttrpg-lightbox.js' | url }}"></script>
   {% if options.codex and (page.url | trim("/")) != (options.codex | trim("/")) %}
     <script src="{{ 'assets/javascripts/ttrpg-codex-links.js' | url }}" data-codex="{{ options.codex | url }}"></script>
+  {% endif %}
+  {% if page.meta and page.meta.portrait and options.portrait in ["auto", "print"] %}
+    <script src="{{ 'assets/javascripts/ttrpg-portrait.js' | url }}"></script>
   {% endif %}
 {% endblock %}
