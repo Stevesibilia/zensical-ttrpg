@@ -28,20 +28,13 @@
   - `auto`: the cover for a wide picture, the print for a tall or square
     one. The print is rendered; ttrpg-portrait.js switches a wide one.
   Outside `box` the picture links to itself, so it opens full screen, and
-  extra.ttrpg.portrait_trim (a percentage) crops a border off each edge.
+  extra.ttrpg.portrait_trim (a percentage) crops a border off each edge:
+  main.html sets the scale for it on .md-content.
 -#}
 {% set portrait_mode = options.portrait if options.portrait in ["auto", "cover", "print"] else "box" %}
 {% set portrait_box = "" %}
 {% if meta.portrait and portrait_mode != "box" %}
-  {% set trim = (options.portrait_trim or 0) | float %}
-  {% set portrait_box %}
-    {%- if trim > 0 and trim < 25 -%}
-      <figure class="ttrpg-figure ttrpg-figure--{{ 'print' if portrait_mode == 'auto' else portrait_mode }}" data-portrait="{{ portrait_mode }}" style="--ttrpg-portrait-zoom: {{ (100 / (100 - 2 * trim)) | round(3) }}">
-    {%- else -%}
-      <figure class="ttrpg-figure ttrpg-figure--{{ 'print' if portrait_mode == 'auto' else portrait_mode }}" data-portrait="{{ portrait_mode }}">
-    {%- endif -%}
-    <a class="ttrpg-figure__frame" href="{{ meta.portrait | url }}"><img src="{{ meta.portrait | url }}" alt="{{ ttrpg.t('portrait_of') }} {{ page.title }}"></a></figure>
-  {%- endset %}
+  {% set portrait_box %}<figure class="ttrpg-figure ttrpg-figure--{{ 'print' if portrait_mode == 'auto' else portrait_mode }}" data-portrait="{{ portrait_mode }}"><a class="ttrpg-figure__frame" href="{{ meta.portrait | url }}"><img src="{{ meta.portrait | url }}" alt="{{ ttrpg.t('portrait_of') }} {{ page.title }}"></a></figure>{% endset %}
 {% elif meta.portrait %}
   {% set portrait_img %}<img class="ttrpg-portrait" src="{{ meta.portrait | url }}" alt="{{ ttrpg.t('portrait_of') }} {{ page.title }}" loading="lazy">{% endset %}
   {% if 'class="ttrpg-infobox">' in html %}

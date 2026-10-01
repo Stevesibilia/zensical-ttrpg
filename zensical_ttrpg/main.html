@@ -75,8 +75,12 @@
     {%- if options.title == "banner" %} ttrpg-banner{% endif -%}
     {%- if options.tabs == "thumb" %} ttrpg-tabs{% endif -%}
     {%- if options.codex and (page.url | trim("/")) == (options.codex | trim("/")) %} ttrpg-codex{% endif -%}
+    {%- if options.portrait in ["auto", "cover", "print"] %} ttrpg-portraits{% endif -%}
   {%- endset %}
-  <div class="md-content{{ modifiers }}" data-md-component="content">
+  {#- portrait_trim, as the scale that crops it off: for the page's portrait and the party's. -#}
+  {% set trim = (options.portrait_trim or 0) | float %}
+  {% set zoom = (100 / (100 - 2 * trim)) | round(3) if options.portrait in ["auto", "cover", "print"] and trim > 0 and trim < 25 else 0 %}
+  <div class="md-content{{ modifiers }}"{% if zoom %} style="--ttrpg-portrait-zoom: {{ zoom }}"{% endif %} data-md-component="content">
     {% if "navigation.path" in (config.theme.features or []) %}
       {% include "partials/path.html" %}
     {% endif %}

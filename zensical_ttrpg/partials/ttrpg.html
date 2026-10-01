@@ -205,11 +205,13 @@
           {% for member in found.party %}
             <li>
               <a href="{{ member.url | url }}">
-                {% if member.meta.portrait %}
+                <span class="ttrpg-party__frame"><span class="ttrpg-party__cut">
+                {%- if member.meta.portrait -%}
                   <img src="{{ member.meta.portrait | url }}" alt="" loading="lazy">
-                {% else %}
+                {%- else -%}
                   <span class="ttrpg-party__monogram" aria-hidden="true">{{ member.title[0:1] }}</span>
-                {% endif %}
+                {%- endif -%}
+                </span></span>
                 <span>{{ member.title }}</span>
               </a>
             </li>

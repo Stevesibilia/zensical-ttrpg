@@ -1144,6 +1144,38 @@
   line-height: 1;
 }
 
+.md-typeset .ttrpg-party__frame,
+.md-typeset .ttrpg-party__cut {
+  display: block;
+}
+
+/* With extra.ttrpg.portrait other than box, the party's portraits are small
+   prints, as the print on a character page: no inner rule, cut by the
+   palette's edge, turned by its tilt (every other one the other way), with
+   a shadow, and cropped of portrait_trim's border. */
+.ttrpg-portraits .md-typeset .ttrpg-party__frame {
+  filter: drop-shadow(0 0.5rem 0.7rem var(--ttrpg-lift));
+  transform: rotate(var(--ttrpg-print-tilt));
+}
+
+.ttrpg-portraits .md-typeset .ttrpg-party li:nth-child(even) .ttrpg-party__frame {
+  transform: rotate(calc(-0.8 * var(--ttrpg-print-tilt)));
+}
+
+.ttrpg-portraits .md-typeset .ttrpg-party__cut {
+  overflow: hidden;
+  clip-path: var(--ttrpg-print-edge);
+}
+
+.ttrpg-portraits .md-typeset :is(.ttrpg-party img, .ttrpg-party__monogram) {
+  outline: none;
+}
+
+.ttrpg-portraits .md-typeset .ttrpg-party img {
+  object-position: 50% 20%;
+  transform: scale(var(--ttrpg-portrait-zoom, 1));
+}
+
 /* A portrait without an identity box: just the picture, beside the text. */
 .md-typeset .ttrpg-infobox--portrait .ttrpg-portrait {
   margin: 0;
@@ -1252,8 +1284,9 @@
   }
 }
 
-.md-typeset .ttrpg-party a:hover span,
-.md-typeset .ttrpg-party a:focus-visible span {
+/* The name, not the picture's frame, is underlined. */
+.md-typeset .ttrpg-party a:hover > span:last-child,
+.md-typeset .ttrpg-party a:focus-visible > span:last-child {
   text-decoration: underline 1px var(--ttrpg-brass);
   text-underline-offset: 0.2em;
 }
