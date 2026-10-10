@@ -16,7 +16,8 @@ speaks Italian or English, following `theme.language`.
 ## What it does
 
 - **Pages**: one readable column (about 70 characters), no sidebars on wide
-  screens, the usual drawer menu on phones, previous/next links at the bottom.
+  screens unless you ask for the menu in one, the usual drawer menu on
+  phones, previous/next links at the bottom.
 - **Session pages**: a line with the session number and date above the title,
   the excerpt in a summary box under it, a drop cap, and scene breaks (`---`)
   drawn as ornaments.
@@ -24,13 +25,19 @@ speaks Italian or English, following `theme.language`.
   "new" badge on the latest session.
 - **Character pages**: an identity box beside the text, with the portrait on top.
 - **Home page**: the latest session, the characters with their portraits, and
-  the map.
+  the map. A site that holds many campaigns gets a shelf instead: a book for
+  each campaign, in its own colour.
+- **Many campaigns on one site**: each campaign folder can have its own
+  colour (a binding), for its headings, links, drop cap and thumb tab, and a
+  spine beside its name in the menu.
+- **Audio**: a player in the text takes the column's width, and can sit in
+  a soundtrack box.
 - **Images**: a link around an image that points to an image file (a map)
   opens it full screen, with zoom, pinch and pan.
 - **Tooltips**: names from a glossary show a short description on hover.
 - **Palettes**: colours, backdrop, paper grain and scene-break ornaments come
-  from a palette: `marina`, `sangue-e-neve`, `oro-di-copertina` and
-  `elettroplasma` so far. A
+  from a palette: `marina`, `sangue-e-neve`, `oro-di-copertina`,
+  `elettroplasma` and `scaffale` so far. A
   light and a dark scheme each, with a toggle.
 - **Book-like touches**, each optional: centred titles, as on a book's chapter
   openings; subheadings as rubrics; an illuminated drop cap; filigree in the
@@ -43,7 +50,7 @@ Zensical, from a release tag:
 
 ```text
 zensical==0.0.62
-zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.8.1.tar.gz
+zensical-ttrpg @ https://github.com/Stevesibilia/zensical-ttrpg/archive/refs/tags/v0.9.0.tar.gz
 ```
 
 No git is needed to install it, so it works in slim Docker images.
@@ -213,6 +220,8 @@ initial. A list of sayings can go in `<div class="ttrpg-quotes" markdown>`.
 
 ### The home page
 
+For a site with one campaign:
+
 ```markdown
 ---
 hub: true
@@ -229,6 +238,74 @@ A line or two about it.
 With `hub: true` the page shows the latest session, every character (a page
 with a `portrait` or `character: true`, up to three levels deep in the nav),
 and the map, which opens full screen on click.
+
+### Many campaigns on one site
+
+A site that holds several campaigns, each in its own folder
+(`kulthos/sabaoth/`, `symbaroum/davokar/`), gives each one a colour, its
+binding, in `mkdocs.yml`:
+
+```yaml
+extra:
+  ttrpg:
+    sidebar: true # the menu stays beside the page on wide screens
+    bindings: # folder: [light scheme, dark scheme], or one colour for both
+      kulthos/sabaoth: ["#1d605c", "#72c6bd"]
+      symbaroum/davokar: ["#3d5a2b", "#a3c486"]
+```
+
+A page under a folder takes its binding for its headings, links, drop cap
+and thumb tab (the light colour for the tab in both schemes, under light
+text). A key can also be a single folder (`kulthos`), for every campaign in
+it; the longer key wins. Pick colours that read as text on the palette's
+paper: the light one on the light paper, the dark one on the dark.
+
+In the menu, the campaign's section shows a small spine in its colour: the
+deepest section that holds every page under the folder, and no other page.
+
+`sidebar: true` keeps the menu beside the page from 76.25em up, as a dark
+panel over the backdrop. With `navigation.sections` among the features, the
+top level of the menu (the games) shows as small capitals and the campaigns
+under them open and close.
+
+The home page shows the shelf with `shelf: true`:
+
+```markdown
+---
+shelf: true
+contents: none
+---
+
+# Our Campaigns
+
+A line or two about the table.
+```
+
+Under the page's text come the newest session of any campaign (by its
+`date`), a shelf with a book for each campaign that has a binding, in menu
+order, and a log of them, the latest played first. A book shows the number
+of session pages (pages with `session` in their front matter); the log
+counts pages for a campaign without any. A campaign with no binding is left
+off the shelf.
+
+### Audio
+
+A player written in the text takes the column's width:
+
+```html
+<audio controls preload="none" src="audio/theme.mp3"></audio>
+```
+
+Paths in raw HTML are relative to the Markdown file, as in Markdown links.
+In a `figure` with the `ttrpg-audio` class, with a caption, it becomes a
+soundtrack box:
+
+```html
+<figure class="ttrpg-audio">
+  <audio controls preload="none" src="audio/theme.mp3"></audio>
+  <figcaption>Soundtrack</figcaption>
+</figure>
+```
 
 ### Section pages
 
@@ -304,12 +381,13 @@ The oldest drover of the caravan.
 
 ## Palettes
 
-| Palette            | Light                                         | Dark                             | Backdrop                             | Ornaments | Pairs with                                                                                          |
-| ------------------ | --------------------------------------------- | -------------------------------- | ------------------------------------ | --------- | --------------------------------------------------------------------------------------------------- |
-| `marina`           | navy and brass on parchment                   | pale blue and brass on slate     | the sea, seen from a plane           | ⚓ ✥      | IM Fell English SC, Alegreya                                                                        |
-| `sangue-e-neve`    | crimson on cold white, petrol header          | rose-red on night, petrol header | falling snow                         | ☾ ✠       | Cinzel, EB Garamond, `title: centered`                                                              |
-| `oro-di-copertina` | blood red on parchment, black and gold header | gold on near-black               | an oil glaze, warm glows in the dark | ⚜ ❦       | Grenze Gotisch (600), Libre Caslon Text, IM Fell English SC for subheadings, and every style option |
-| `elettroplasma`    | ink and cyan on cold grey paper               | electric cyan on charcoal        | rain                                 | ◆ ϟ       | Alfa Slab One, Crimson Pro, `title: banner`, `boxes: headed`, `tabs: thumb`, the dark scheme first  |
+| Palette            | Light                                         | Dark                             | Backdrop                             | Ornaments | Pairs with                                                                                             |
+| ------------------ | --------------------------------------------- | -------------------------------- | ------------------------------------ | --------- | ------------------------------------------------------------------------------------------------------ |
+| `marina`           | navy and brass on parchment                   | pale blue and brass on slate     | the sea, seen from a plane           | ⚓ ✥      | IM Fell English SC, Alegreya                                                                           |
+| `sangue-e-neve`    | crimson on cold white, petrol header          | rose-red on night, petrol header | falling snow                         | ☾ ✠       | Cinzel, EB Garamond, `title: centered`                                                                 |
+| `oro-di-copertina` | blood red on parchment, black and gold header | gold on near-black               | an oil glaze, warm glows in the dark | ⚜ ❦       | Grenze Gotisch (600), Libre Caslon Text, IM Fell English SC for subheadings, and every style option    |
+| `elettroplasma`    | ink and cyan on cold grey paper               | electric cyan on charcoal        | rain                                 | ◆ ϟ       | Alfa Slab One, Crimson Pro, `title: banner`, `boxes: headed`, `tabs: thumb`, the dark scheme first     |
+| `scaffale`         | walnut brown on parchment, ink-dark header    | old gold on near-black           | walnut planks                        | ❧ ✥       | Cormorant SC (700), Alegreya, `sidebar: true`, `bindings`, `shelf: true`, for a site of many campaigns |
 
 A session page in each palette, light scheme on the left and dark on the
 right. These come from the mock-ups the palettes were chosen on, with text
@@ -330,6 +408,11 @@ from real campaigns, so a detail or two differs from the theme.
 `elettroplasma`, for a Blades in the Dark campaign, on the example site:
 
 ![A session page in the elettroplasma palette, light and dark](screenshots/elettroplasma.jpg)
+
+`scaffale`, for a site with campaigns in five systems, each with its binding
+(here Kulthos, in sea green):
+
+![A session page in the scaffale palette, light and dark](screenshots/scaffale.jpg)
 
 ### Your own palette
 

@@ -31,6 +31,15 @@
                       (see partials/content.html)
     portrait_trim:    a percentage cropped off each edge of the portrait
                       outside `box`, for pictures with a border of their own
+    sidebar:          `true` keeps the menu in a sidebar on wide screens,
+                      over the backdrop; the tabs carry it otherwise
+    bindings:         for a site that holds many campaigns, a colour per
+                      campaign folder, as `folder: [light, dark]` (or one
+                      colour for both): `kulthos/sabaoth: ["#1d605c",
+                      "#72c6bd"]`. A page under the folder takes it for its
+                      headings, links, drop cap and thumb tab; the menu
+                      marks the campaign with a spine in it, and the shelf
+                      (`shelf: true` on the home page) shows its book.
   title (banner only), subheadings, drop_cap, corners, boxes and tabs
   become classes on .md-content
   (see the container block), and so does codex, on the codex page only.
@@ -38,12 +47,21 @@
 {% set options = (config.extra.ttrpg if config.extra and config.extra.ttrpg else {}) %}
 {% set palette = options.palette or "marina" %}
 {% set heading_font = options.heading_font if options.heading_font is defined else "IM Fell English SC" %}
+{% set bindings = options.bindings or {} %}
+{% set binding = ttrpg.binding_of(page.url if page else "") | trim %}
 
 {% block styles %}
   {{ super() }}
   <link rel="stylesheet" href="{{ 'assets/stylesheets/ttrpg.css' | url }}">
   {% if palette != "none" %}
     <link rel="stylesheet" href="{{ ('assets/stylesheets/palettes/' ~ palette ~ '.css') | url }}">
+  {% endif %}
+  {#- The binding of the campaign the page belongs to: its colours, the
+      light one for the light scheme and the tab in both. -#}
+  {% if binding %}
+    {% set light = ttrpg.binding_colour(binding, 0) | trim %}
+    {% set dark = ttrpg.binding_colour(binding, 1) | trim %}
+    <style>[data-md-color-scheme="default"]{--ttrpg-binding:{{ light }};--ttrpg-head:{{ light }};--ttrpg-drop-cap:{{ light }};--ttrpg-tab:{{ light }}}[data-md-color-scheme="slate"]{--ttrpg-binding:{{ light }};--ttrpg-head:{{ dark }};--ttrpg-drop-cap:{{ dark }};--ttrpg-tab:{{ light }}}</style>
   {% endif %}
 {% endblock %}
 
@@ -76,6 +94,7 @@
     {%- if options.tabs == "thumb" %} ttrpg-tabs{% endif -%}
     {%- if options.codex and (page.url | trim("/")) == (options.codex | trim("/")) %} ttrpg-codex{% endif -%}
     {%- if options.portrait in ["auto", "cover", "print"] %} ttrpg-portraits{% endif -%}
+    {%- if options.sidebar %} ttrpg-sidebar{% endif -%}
   {%- endset %}
   {#- portrait_trim, as the scale that crops it off: for the page's portrait and the party's. -#}
   {% set trim = (options.portrait_trim or 0) | float %}
@@ -87,6 +106,9 @@
     <article class="md-content__inner md-typeset">
       {% block content %}
         {{ super() }}
+        {% if page.meta and page.meta.shelf %}
+          {{ ttrpg.shelf() }}
+        {% endif %}
         {% if page.meta and page.meta.hub %}
           {{ ttrpg.home_hub() }}
         {% endif %}
@@ -101,6 +123,9 @@
 {% block scripts %}
   {{ super() }}
   <script src="{{ 'assets/javascripts/ttrpg-lightbox.js' | url }}"></script>
+  {% if bindings %}
+    <script src="{{ 'assets/javascripts/ttrpg-bindings.js' | url }}" data-root="{{ '.' | url }}" data-bindings="{{ ttrpg.bindings_json() | trim | e }}"></script>
+  {% endif %}
   {% if options.codex and (page.url | trim("/")) != (options.codex | trim("/")) %}
     <script src="{{ 'assets/javascripts/ttrpg-codex-links.js' | url }}" data-codex="{{ options.codex | url }}"></script>
   {% endif %}

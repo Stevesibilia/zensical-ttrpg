@@ -25,7 +25,16 @@
       "map": "La mappa",
       "other_pages": "Altre pagine",
       "portrait_of": "Ritratto di",
-      "identity": "Identità"
+      "identity": "Identità",
+      "shelf": "Lo scaffale",
+      "ledger": "Registro del tavolo",
+      "campaign": "Campagna",
+      "game": "Gioco",
+      "last_played": "Ultima giocata",
+      "on_site": "Sul sito",
+      "session_one": "sessione",
+      "session_many": "sessioni",
+      "pages": "pagine"
     },
     "en": {
       "session": "Session",
@@ -37,7 +46,16 @@
       "map": "The map",
       "other_pages": "Other pages",
       "portrait_of": "Portrait of",
-      "identity": "Identity"
+      "identity": "Identity",
+      "shelf": "The shelf",
+      "ledger": "Campaign log",
+      "campaign": "Campaign",
+      "game": "Game",
+      "last_played": "Last played",
+      "on_site": "On the site",
+      "session_one": "session",
+      "session_many": "sessions",
+      "pages": "pages"
     }
   } -%}
   {%- set language = (config.theme.language or "en")[0:2] -%}
@@ -225,6 +243,208 @@
         <a class="ttrpg-hub__map" href="{{ page.meta.map | url }}">
           <img src="{{ (page.meta.map_thumbnail or page.meta.map) | url }}" alt="{{ page.meta.map_alt or t('map') }}" loading="lazy">
         </a>
+      </section>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{#-
+  Bindings (extra.ttrpg.bindings): a colour per campaign folder, as
+  `folder: [light, dark]` or one colour for both.
+-#}
+{#- The binding a page belongs to, from its URL: its first two folders, else
+    its first one; nothing when neither has a binding. -#}
+{% macro binding_of(url) -%}
+  {%- set all = config.extra.ttrpg.bindings if config.extra and config.extra.ttrpg and config.extra.ttrpg.bindings else {} -%}
+  {%- set parts = (url or "") | trim("/") | split("/") | list -%}
+  {%- if parts | length >= 2 and (parts[0] ~ "/" ~ parts[1]) in all -%}
+    {{- parts[0] ~ "/" ~ parts[1] -}}
+  {%- elif parts[0] and parts[0] in all -%}
+    {{- parts[0] -}}
+  {%- endif -%}
+{%- endmacro %}
+
+{#- One colour of a binding: 0 for the light scheme, 1 for the dark. -#}
+{% macro binding_colour(key, index) -%}
+  {%- set all = config.extra.ttrpg.bindings -%}
+  {%- set value = all[key] if key in all else all[key ~ "/"] -%}
+  {%- if value is string -%}
+    {{- value -}}
+  {%- elif value | length > index -%}
+    {{- value[index] -}}
+  {%- else -%}
+    {{- value[0] -}}
+  {%- endif -%}
+{%- endmacro %}
+
+{#- Every binding's light colour, as JSON, for the menu's spines. -#}
+{% macro bindings_json() -%}
+  {%- set all = config.extra.ttrpg.bindings if config.extra and config.extra.ttrpg and config.extra.ttrpg.bindings else {} -%}
+  {
+  {%- for key in all -%}
+    {{- (key | trim("/")) | tojson }}:{{ (binding_colour(key, 0) | trim) | tojson -}}
+    {%- if not loop.last %},{% endif -%}
+  {%- endfor -%}
+  }
+{%- endmacro %}
+
+{#- The pages under a nav item, into ns.pages. -#}
+{% macro collect_pages(item, ns) -%}
+  {%- if item.children -%}
+    {%- for child in item.children -%}{{ collect_pages(child, ns) }}{%- endfor -%}
+  {%- elif item.url is not none -%}
+    {%- set ns.pages = ns.pages + [item] -%}
+  {%- endif -%}
+{%- endmacro %}
+
+{#-
+  The books on the shelf, into found.books: for each binding, the deepest
+  section of the menu that holds every page under the binding's folder and
+  no other. A campaign without a binding has no book.
+-#}
+{% macro find_books(items, parent, depth, found) -%}
+  {%- for item in items -%}
+    {%- if item.children -%}
+      {%- set mine = namespace(pages = []) -%}
+      {{- collect_pages(item, mine) -}}
+      {%- for key in found.keys -%}
+        {%- set count = namespace(in_key = 0) -%}
+        {%- for p in mine.pages -%}
+          {%- if ((p.url | trim("/")) ~ "/") is startingwith(key ~ "/") -%}
+            {%- set count.in_key = count.in_key + 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if count.in_key and count.in_key == mine.pages | length and count.in_key == found.totals[loop.index0] -%}
+          {%- set found.books = found.books + [{"key": key, "depth": depth, "item": item, "parent": parent, "pages": mine.pages}] -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {{- find_books(item.children, item, depth + 1, found) -}}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endmacro %}
+
+{#-
+  The home page of a site that holds many campaigns, when its front matter
+  says `shelf: true`: the newest session of any campaign, a shelf with a
+  book for each campaign that has a binding, and a log of them, newest
+  first.
+-#}
+{% macro shelf() %}
+  {% set all = config.extra.ttrpg.bindings if config.extra and config.extra.ttrpg and config.extra.ttrpg.bindings else {} %}
+  {% set everything = namespace(pages = []) %}
+  {% for item in nav.items %}{{ collect_pages(item, everything) }}{% endfor %}
+  {% set found = namespace(keys = [], totals = [], books = []) %}
+  {% for key in all %}
+    {% set clean = key | trim("/") %}
+    {% set count = namespace(n = 0) %}
+    {% for p in everything.pages %}
+      {% if ((p.url | trim("/")) ~ "/") is startingwith(clean ~ "/") %}
+        {% set count.n = count.n + 1 %}
+      {% endif %}
+    {% endfor %}
+    {% set found.keys = found.keys + [clean] %}
+    {% set found.totals = found.totals + [count.n] %}
+  {% endfor %}
+  {{ find_books(nav.items, none, 0, found) }}
+
+  {#- The deepest section per binding, in menu order, with its sessions. -#}
+  {% set shelf = namespace(books = [], latest = none, latest_book = none) %}
+  {% for candidate in found.books %}
+    {% set deeper = namespace(found = false) %}
+    {% for other in found.books %}
+      {% if other.key == candidate.key and other.depth > candidate.depth %}
+        {% set deeper.found = true %}
+      {% endif %}
+    {% endfor %}
+    {% if not deeper.found %}
+      {% set book = namespace(sessions = 0, latest = none) %}
+      {% for p in candidate.pages %}
+        {% if p.meta and p.meta.session %}
+          {% set book.sessions = book.sessions + 1 %}
+          {% if book.latest is none or (p.meta.date | string) >= (book.latest.meta.date | string) %}
+            {% set book.latest = p %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% set entry = {
+        "key": candidate.key,
+        "title": candidate.item.title,
+        "game": candidate.parent.title if candidate.parent else "",
+        "url": (candidate.pages | first).url,
+        "pages": candidate.pages | length,
+        "sessions": book.sessions,
+        "latest": book.latest,
+        "date": (book.latest.meta.date | string) if book.latest and book.latest.meta.date else "",
+        "colour": binding_colour(candidate.key, 0) | trim,
+        "bright": binding_colour(candidate.key, 1) | trim
+      } %}
+      {% set shelf.books = shelf.books + [entry] %}
+      {% if book.latest and (shelf.latest is none or entry.date >= shelf.latest_book.date) %}
+        {% set shelf.latest = book.latest %}
+        {% set shelf.latest_book = entry %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  <div class="ttrpg-shelf-home">
+    {% if shelf.latest %}
+      {% set latest = shelf.latest %}
+      <a class="ttrpg-shelf__latest" href="{{ latest.url | url }}" style="--ttrpg-book: {{ shelf.latest_book.colour }}">
+        <span class="ttrpg-shelf__ribbon" aria-hidden="true"></span>
+        <span class="ttrpg-shelf__label">{{ t("latest") }}</span>
+        <span class="ttrpg-hub__eyebrow">{% if shelf.latest_book.game %}{{ shelf.latest_book.game }} · {% endif %}{{ shelf.latest_book.title }}{% if latest.meta.date %} · {{ long_date(latest.meta.date) }}{% endif %}</span>
+        <span class="ttrpg-hub__title">{{ latest.title }}</span>
+        {% if latest.meta.excerpt %}
+          <span class="ttrpg-hub__excerpt">{{ latest.meta.excerpt }}</span>
+        {% endif %}
+        <span class="ttrpg-hub__more">{{ t("read") }}</span>
+      </a>
+    {% endif %}
+
+    {% if shelf.books %}
+      <section class="ttrpg-shelf-home__block">
+        <h2>{{ t("shelf") }}</h2>
+        <div class="ttrpg-shelf">
+          <ul class="ttrpg-shelf__books">
+            {% for book in shelf.books %}
+              {#- Books of different heights and widths, the same on every build. -#}
+              {% set height = 10.5 + ((loop.index * 3 + (book.title | length) * 2) % 5) * 0.6 %}
+              {% set width = 2.8 + ((book.title | length) % 4) * 0.2 %}
+              <li>
+                <a class="ttrpg-book" href="{{ book.url | url }}" style="--ttrpg-book: {{ book.colour }}; --ttrpg-book-h: {{ height | round(1) }}rem; --ttrpg-book-w: {{ width | round(1) }}rem" title="{% if book.game %}{{ book.game }} · {% endif %}{{ book.title }}">
+                  <span class="ttrpg-book__count">{{ book.sessions if book.sessions else "" }}</span>
+                  <span class="ttrpg-book__name">{{ book.title }}</span>
+                  <span class="ttrpg-book__game">{{ book.game }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+
+      <section class="ttrpg-shelf-home__block">
+        <h2>{{ t("ledger") }}</h2>
+        <table class="ttrpg-ledger">
+          <thead>
+            <tr><th>{{ t("campaign") }}</th><th>{{ t("game") }}</th><th>{{ t("on_site") }}</th><th>{{ t("last_played") }}</th></tr>
+          </thead>
+          <tbody>
+            {% for book in shelf.books | sort(attribute = "date", reverse = true) %}
+              <tr style="--ttrpg-book: {{ book.colour }}; --ttrpg-book-bright: {{ book.bright }}">
+                <td><a href="{{ book.url | url }}">{{ book.title }}</a></td>
+                <td>{{ book.game }}</td>
+                <td class="ttrpg-ledger__number">
+                  {%- if book.sessions -%}
+                    {{ book.sessions }} {{ t("session_one") if book.sessions == 1 else t("session_many") }}
+                  {%- else -%}
+                    {{ book.pages }} {{ t("pages") }}
+                  {%- endif -%}
+                </td>
+                <td class="ttrpg-ledger__number">{{ long_date(book.date) if book.date else "" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </section>
     {% endif %}
   </div>
